@@ -133,7 +133,7 @@ export default function Gallery() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.4, ease: EASE_OUT_EXPO }}
-            className="font-display font-semibold italic text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#3C2415] tracking-tight leading-[1.02]"
+            className="font-display font-semibold italic text-[clamp(3rem,12vw,8rem)] lg:text-9xl text-[#3C2415] tracking-tight leading-[1.02]"
           >
             The <span className="text-gold-shimmer not-italic font-display font-semibold italic">Gallery</span>
           </motion.h1>

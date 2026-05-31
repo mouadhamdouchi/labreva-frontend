@@ -119,7 +119,7 @@ export default function About() {
       {/* Header */}
       <section
         ref={headerRef}
-        className="relative min-h-screen flex items-center justify-center bg-void text-center px-6 overflow-hidden"
+        className="relative min-h-screen min-h-[100svh] flex items-center justify-center bg-void text-center px-6 overflow-hidden"
       >
         {/* Layer 1 — cinematic background photo with parallax */}
         <motion.div
@@ -165,18 +165,6 @@ export default function About() {
         {/* Layer 7 — architectural rule lines */}
         <div className="absolute top-0 bottom-0 left-6 lg:left-12 w-px bg-gradient-to-b from-transparent via-amber/30 to-transparent hidden md:block" />
         <div className="absolute top-0 bottom-0 right-6 lg:right-12 w-px bg-gradient-to-b from-transparent via-amber/30 to-transparent hidden md:block" />
-
-        {/* Vertical text accents */}
-        <div className="absolute left-3 lg:left-6 top-1/2 -translate-y-1/2 hidden md:block z-10 pointer-events-none">
-          <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-blush/40 text-vertical">
-            Est. MMXII &middot; Fes el Bali
-          </span>
-        </div>
-        <div className="absolute right-3 lg:right-6 top-1/2 -translate-y-1/2 hidden md:block z-10 pointer-events-none">
-          <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-blush/40 text-vertical">
-            34&deg;N &middot; 5&deg;W &middot; Morocco
-          </span>
-        </div>
 
         {/* Content */}
         <motion.div style={{ opacity: headerOpacity }} className="relative z-10 max-w-5xl mx-auto">
@@ -247,19 +235,6 @@ export default function About() {
             Where tradition meets modernity &mdash; in the heart of Fes.
           </motion.p>
 
-          {/* Footer meta */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.9, duration: 0.9 }}
-            className="mt-14 flex items-center justify-center gap-5 text-parchment/55"
-          >
-            <span className="font-mono text-[11px] tracking-[0.28em] uppercase">Est. 2012</span>
-            <span className="w-1.5 h-1.5 rotate-45 border border-amber/60" aria-hidden="true" />
-            <span className="font-mono text-[11px] tracking-[0.28em] uppercase">Fes el Bali</span>
-            <span className="w-1.5 h-1.5 rotate-45 border border-amber/60" aria-hidden="true" />
-            <span className="font-mono text-[11px] tracking-[0.28em] uppercase hidden sm:inline">Morocco</span>
-          </motion.div>
         </motion.div>
       </section>
 
@@ -425,7 +400,7 @@ export default function About() {
                 Krishna Chaithanya
               </span>
               <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-parchment/55 mt-2">
-                Head Chef &middot; Fes &middot; MMXII
+                Head Chef
               </span>
             </div>
           </Reveal>
@@ -738,11 +713,8 @@ export default function About() {
                       </div>
 
                       {/* Title with subtitle pill */}
-                      <h3 className="font-display text-2xl md:text-3xl text-blush leading-tight flex flex-wrap items-baseline gap-3">
+                      <h3 className="font-display text-2xl md:text-3xl text-blush leading-tight">
                         {m.title}
-                        <span className="font-mono text-[10px] font-medium tracking-[0.3em] uppercase text-amber/75">
-                          (Fes &middot; Morocco)
-                        </span>
                       </h3>
 
                       {/* Description card */}
@@ -819,7 +791,7 @@ export default function About() {
           whileInView="visible"
           viewport={viewportOnce}
           variants={staggerContainer(0.12)}
-          className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 relative"
+          className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 lg:gap-12 relative"
         >
           {stats.map((stat, i) => (
             <motion.div key={i} variants={fadeUp} className="text-center">

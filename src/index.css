@@ -47,6 +47,8 @@
 
   html {
     scroll-behavior: smooth;
+    /* Shrink the whole site by 20% — all rem-based text, padding, gaps, widths follow */
+    font-size: 80%;
   }
 
   body {

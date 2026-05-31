@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Instagram, Facebook, MessageCircle, MapPin, Phone, Mail, ArrowUp, Check } from "lucide-react";
 import { fadeUp, staggerContainer, viewportOnce, EASE_OUT_EXPO } from "@/lib/motion";
@@ -7,6 +7,8 @@ import { fadeUp, staggerContainer, viewportOnce, EASE_OUT_EXPO } from "@/lib/mot
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const { pathname } = useLocation();
+  const isHome = pathname === "/";
 
   const exploreLinks = [
     { name: "Home", path: "/" },
@@ -64,25 +66,25 @@ export default function Footer() {
         variants={staggerContainer(0.08)}
         className="relative max-w-7xl mx-auto px-6 pt-24 pb-10"
       >
-        {/* === Poetic farewell + monogram === */}
-        <motion.div variants={fadeUp} className="text-center mb-16 md:mb-20">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <span className="h-px w-12 bg-amber/45" />
-            <span className="w-1.5 h-1.5 rotate-45 border border-amber" aria-hidden="true" />
-            <span className="h-px w-12 bg-amber/45" />
-          </div>
-          <p className="font-mono text-[12px] tracking-[0.45em] uppercase text-amber mb-5">
-            Maison La Breva
-          </p>
-          <h2 className="font-display italic text-5xl md:text-7xl text-blush leading-[0.95] tracking-tight">
-            La <span className="text-gold-shimmer not-italic font-display italic">Breva</span>
-          </h2>
-          <p className="font-accent italic text-lg md:text-xl text-parchment/75 mt-5 max-w-xl mx-auto leading-relaxed">
-            &ldquo;Where Mediterranean elegance meets Moroccan soul.&rdquo;
-          </p>
-        </motion.div>
+        {/* === Poetic farewell + monogram (Home only) === */}
+        {isHome && (
+          <motion.div variants={fadeUp} className="text-center mb-16 md:mb-20">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <span className="h-px w-12 bg-amber/45" />
+              <span className="w-1.5 h-1.5 rotate-45 border border-amber" aria-hidden="true" />
+              <span className="h-px w-12 bg-amber/45" />
+            </div>
+            <h2 className="font-display italic text-5xl md:text-7xl text-blush leading-[0.95] tracking-tight">
+              La <span className="text-gold-shimmer not-italic font-display italic">Breva</span>
+            </h2>
+            <p className="font-accent italic text-lg md:text-xl text-parchment/75 mt-5 max-w-xl mx-auto leading-relaxed">
+              &ldquo;Where Mediterranean elegance meets Moroccan soul.&rdquo;
+            </p>
+          </motion.div>
+        )}
 
-        {/* === Newsletter strip === */}
+        {/* === Newsletter strip (Home only) === */}
+        {isHome && (
         <motion.div variants={fadeUp} className="max-w-2xl mx-auto mb-20 md:mb-24">
           <div className="flex items-center justify-center gap-3 mb-5">
             <span className="h-px w-10 bg-amber/40" />
@@ -139,6 +141,7 @@ export default function Footer() {
             )}
           </AnimatePresence>
         </motion.div>
+        )}
 
         {/* === Three columns === */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-16">
@@ -273,7 +276,7 @@ export default function Footer() {
           className="flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left"
         >
           <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-parchment/55">
-            &copy; MMXXV &nbsp;&middot;&nbsp; La Breva
+            &copy; 2026 &nbsp;&middot;&nbsp; La Breva
             <span className="hidden md:inline">
               &nbsp;&middot;&nbsp; All rights reserved
             </span>
@@ -283,8 +286,6 @@ export default function Footer() {
             <a href="#" className="hover:text-amber transition-colors">Privacy</a>
             <span className="text-amber/50" aria-hidden="true">&diams;</span>
             <a href="#" className="hover:text-amber transition-colors">Terms</a>
-            <span className="text-amber/50" aria-hidden="true">&diams;</span>
-            <span className="text-parchment/55">Crafted in Fes</span>
           </div>
 
           {/* Back to top */}

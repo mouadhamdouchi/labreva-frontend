@@ -83,7 +83,7 @@ export default function Contact() {
             initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
             transition={{ duration: 1.5, ease: EASE_OUT_EXPO, delay: 0.3 }}
-            className="font-display italic text-[clamp(3.5rem,11vw,10rem)] leading-[0.9] tracking-tight text-blush"
+            className="font-display italic text-[clamp(2.5rem,10vw,8.5rem)] leading-[0.9] tracking-tight text-blush"
           >
             Contact
           </motion.h1>
@@ -91,7 +91,7 @@ export default function Contact() {
             initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
             transition={{ duration: 1.5, ease: EASE_OUT_EXPO, delay: 0.6 }}
-            className="font-display italic text-[clamp(2.5rem,8vw,7.5rem)] leading-[0.9] tracking-tight -mt-2 md:-mt-3 text-gold-shimmer"
+            className="font-display italic text-[clamp(1.75rem,7vw,6.5rem)] leading-[0.9] tracking-tight -mt-1 md:-mt-3 text-gold-shimmer"
           >
             Us
           </motion.h2>
@@ -113,7 +113,7 @@ export default function Contact() {
           whileInView="visible"
           viewport={viewportOnce}
           variants={staggerContainer(0.08)}
-          className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10"
+          className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-10"
         >
           {[
             { icon: MapPin, label: "Address", detail: "12 Rue Sidi El Khiya, Fes el Bali", cta: "Get Directions", href: "https://maps.google.com/?q=La+Breva+Fes" },
@@ -329,7 +329,6 @@ export default function Contact() {
               <div className="rounded-sm bg-gradient-to-br from-warm-stone/40 to-obsidian/60 border border-charcoal/80 backdrop-blur-[6px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.55)] overflow-hidden">
                 {/* Header strip */}
                 <div className="px-8 py-7 border-b border-amber/15">
-                  <p className="font-mono text-[12px] tracking-[0.4em] uppercase text-amber mb-2">Maison La Breva</p>
                   <h3 className="font-display italic text-3xl text-blush leading-tight">
                     Find <span className="text-gold-shimmer not-italic font-display italic">us</span>
                   </h3>
@@ -458,7 +457,7 @@ export default function Contact() {
             <div className="absolute top-6 left-6 md:top-10 md:left-10 max-w-xs rounded-sm bg-[#0E0D0C]/90 backdrop-blur-md border border-amber/30 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] p-6">
               <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-amber mb-2">La Breva</p>
               <p className="font-display italic text-2xl text-blush leading-tight mb-3">12 Rue Sidi El Khiya</p>
-              <p className="font-body text-base text-parchment/80 mb-4">Fes el Bali · Morocco · 34&deg;N</p>
+              <p className="font-body text-base text-parchment/80 mb-4">Fes el Bali · Morocco</p>
               <a
                 href="https://maps.google.com/?q=La+Breva+Fes"
                 target="_blank"
