@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ChevronLeft,
   ChevronRight,
@@ -39,199 +41,199 @@ type MenuItem = {
 
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
   // BREAKFAST — Petit Déjeuner
-  { id: 101, name: "Moroccan Breakfast", description: "Msemen, baghrir, olive oil, honey, mint tea", price: 120, category: "breakfast", isChefsRec: true, image: "/picts/menu/breakfast.jpg" },
-  { id: 102, name: "Continental", description: "Bread, jam, butter, juice, coffee", price: 90, category: "breakfast" },
-  { id: 103, name: "Eggs Benedict", description: "Poached eggs, hollandaise, English muffin", price: 110, category: "breakfast" },
-  { id: 104, name: "Shakshuka", description: "Eggs poached in spiced tomato sauce", price: 95, category: "breakfast", isVegetarian: true },
-  { id: 105, name: "Avocado Toast", description: "Sourdough, smashed avocado, chili, lime", price: 100, category: "breakfast", isVegetarian: true },
-  { id: 106, name: "Omelette Fines Herbes", description: "Three eggs, parsley, chervil, chives", price: 85, category: "breakfast", isVegetarian: true },
-  { id: 107, name: "Pancakes Maison", description: "Maple syrup, fresh fruit, vanilla butter", price: 80, category: "breakfast", isVegetarian: true },
-  { id: 108, name: "Granola Bowl", description: "House granola, yogurt, honey, fresh fruit", price: 75, category: "breakfast", isVegetarian: true },
-  { id: 109, name: "French Toast", description: "Brioche, vanilla, berries, powdered sugar", price: 85, category: "breakfast", isVegetarian: true },
-  { id: 110, name: "Smoked Salmon Bagel", description: "Cream cheese, capers, red onion, dill", price: 130, category: "breakfast" },
-  { id: 111, name: "Khlea & Eggs", description: "Cured spiced beef, eggs, fresh bread", price: 105, category: "breakfast" },
+  { id: 101, name: "Petit Déjeuner Marocain", description: "Msemen, baghrir, huile d'olive, miel, thé à la menthe", price: 120, category: "breakfast", isChefsRec: true, image: "/picts/menu/breakfast.jpg" },
+  { id: 102, name: "Continental", description: "Pain, confiture, beurre, jus, café", price: 90, category: "breakfast" },
+  { id: 103, name: "Œufs Bénédicte", description: "Œufs pochés, sauce hollandaise, muffin anglais", price: 110, category: "breakfast" },
+  { id: 104, name: "Shakshuka", description: "Œufs pochés dans une sauce tomate épicée", price: 95, category: "breakfast", isVegetarian: true },
+  { id: 105, name: "Toast à l'Avocat", description: "Pain au levain, avocat écrasé, piment, citron vert", price: 100, category: "breakfast", isVegetarian: true },
+  { id: 106, name: "Omelette Fines Herbes", description: "Trois œufs, persil, cerfeuil, ciboulette", price: 85, category: "breakfast", isVegetarian: true },
+  { id: 107, name: "Pancakes Maison", description: "Sirop d'érable, fruits frais, beurre vanillé", price: 80, category: "breakfast", isVegetarian: true },
+  { id: 108, name: "Bol de Granola", description: "Granola maison, yaourt, miel, fruits frais", price: 75, category: "breakfast", isVegetarian: true },
+  { id: 109, name: "Pain Perdu", description: "Brioche, vanille, fruits rouges, sucre glace", price: 85, category: "breakfast", isVegetarian: true },
+  { id: 110, name: "Bagel au Saumon Fumé", description: "Fromage frais, câpres, oignon rouge, aneth", price: 130, category: "breakfast" },
+  { id: 111, name: "Khlea & Œufs", description: "Bœuf séché épicé, œufs, pain frais", price: 105, category: "breakfast" },
 
   // STARTERS — Pour Commencer
-  { id: 1, name: "Grilled Octopus", description: "Smoked paprika aioli, charred lemon, herbs", price: 195, category: "starters", isChefsRec: true, image: "/picts/menu/grilled-octopus.jpg" },
-  { id: 2, name: "Burrata Salad", description: "Heirloom tomatoes, basil oil, aged balsamic", price: 150, category: "starters", image: "/picts/menu/burrata-salad.jpg", isVegetarian: true },
-  { id: 3, name: "Zaalouk", description: "Smoked eggplant, tomato, garlic, cumin", price: 85, category: "starters", isVegetarian: true },
-  { id: 4, name: "Briouats", description: "Crispy pastry, lamb & almonds, honey glaze", price: 110, category: "starters" },
-  { id: 5, name: "Taktouka", description: "Roasted peppers, tomato, fresh herbs", price: 75, category: "starters", isVegetarian: true },
-  { id: 6, name: "Maakouda", description: "Golden potato fritters, harissa dip", price: 70, category: "starters", isVegetarian: true },
-  { id: 7, name: "Beef Carpaccio", description: "Thin slices, parmesan, arugula, lemon oil", price: 170, category: "starters" },
-  { id: 8, name: "Foie Gras Maison", description: "House terrine, fig confit, brioche toast", price: 220, category: "starters" },
-  { id: 9, name: "Salmon Tartare", description: "Avocado, sesame, lime, crispy wonton", price: 175, category: "starters" },
-  { id: 10, name: "Caprese Stack", description: "Buffalo mozzarella, beefsteak tomato, basil", price: 145, category: "starters", isVegetarian: true },
-  { id: 11, name: "Calamari Frits", description: "Crispy squid, lemon aioli, parsley", price: 135, category: "starters" },
+  { id: 1, name: "Poulpe Grillé", description: "Aïoli au paprika fumé, citron grillé, herbes", price: 195, category: "starters", isChefsRec: true, image: "/picts/menu/grilled-octopus.jpg" },
+  { id: 2, name: "Salade de Burrata", description: "Tomates anciennes, huile au basilic, balsamique vieilli", price: 150, category: "starters", image: "/picts/menu/burrata-salad.jpg", isVegetarian: true },
+  { id: 3, name: "Zaalouk", description: "Aubergine fumée, tomate, ail, cumin", price: 85, category: "starters", isVegetarian: true },
+  { id: 4, name: "Briouats", description: "Pâte croustillante, agneau & amandes, glaçage au miel", price: 110, category: "starters" },
+  { id: 5, name: "Taktouka", description: "Poivrons rôtis, tomate, herbes fraîches", price: 75, category: "starters", isVegetarian: true },
+  { id: 6, name: "Maakouda", description: "Beignets de pomme de terre dorés, sauce harissa", price: 70, category: "starters", isVegetarian: true },
+  { id: 7, name: "Carpaccio de Bœuf", description: "Fines tranches, parmesan, roquette, huile au citron", price: 170, category: "starters" },
+  { id: 8, name: "Foie Gras Maison", description: "Terrine maison, confit de figues, toast de brioche", price: 220, category: "starters" },
+  { id: 9, name: "Tartare de Saumon", description: "Avocat, sésame, citron vert, wonton croustillant", price: 175, category: "starters" },
+  { id: 10, name: "Caprese", description: "Mozzarella di bufala, tomate cœur de bœuf, basilic", price: 145, category: "starters", isVegetarian: true },
+  { id: 11, name: "Calamari Frits", description: "Calamars croustillants, aïoli au citron, persil", price: 135, category: "starters" },
 
   // MEZZE — Petites Assiettes
-  { id: 201, name: "Hummus", description: "Tahini, olive oil, smoked paprika", price: 70, category: "mezze", isVegetarian: true, isChefsRec: true, image: "/picts/menu/mezze.jpg" },
-  { id: 202, name: "Baba Ganoush", description: "Smoked eggplant, tahini, lemon, garlic", price: 75, category: "mezze", isVegetarian: true },
-  { id: 203, name: "Muhammara", description: "Walnut & red pepper, pomegranate molasses", price: 80, category: "mezze", isVegetarian: true },
-  { id: 204, name: "Labneh", description: "Strained yogurt, za'atar, olive oil", price: 65, category: "mezze", isVegetarian: true },
-  { id: 205, name: "Stuffed Vine Leaves", description: "Rice, fresh herbs, lemon, pine nuts", price: 90, category: "mezze", isVegetarian: true },
-  { id: 206, name: "Falafel", description: "Crispy chickpea fritters, tahini, herbs", price: 75, category: "mezze", isVegetarian: true },
-  { id: 207, name: "Marinated Olives", description: "Mixed olives, citrus, fennel, garlic", price: 50, category: "mezze", isVegetarian: true },
-  { id: 208, name: "Tabbouleh", description: "Bulgur, parsley, mint, lemon, tomato", price: 70, category: "mezze", isVegetarian: true },
-  { id: 209, name: "Fattoush", description: "Crisp salad, sumac dressing, pita crisps", price: 80, category: "mezze", isVegetarian: true },
-  { id: 210, name: "Spiced Almonds", description: "Roasted, smoked paprika, sea salt", price: 45, category: "mezze", isVegetarian: true },
-  { id: 211, name: "Sambousek", description: "Spiced lamb pastries, mint yogurt", price: 95, category: "mezze" },
+  { id: 201, name: "Houmous", description: "Tahini, huile d'olive, paprika fumé", price: 70, category: "mezze", isVegetarian: true, isChefsRec: true, image: "/picts/menu/mezze.jpg" },
+  { id: 202, name: "Baba Ganoush", description: "Aubergine fumée, tahini, citron, ail", price: 75, category: "mezze", isVegetarian: true },
+  { id: 203, name: "Muhammara", description: "Noix & poivron rouge, mélasse de grenade", price: 80, category: "mezze", isVegetarian: true },
+  { id: 204, name: "Labneh", description: "Yaourt égoutté, za'atar, huile d'olive", price: 65, category: "mezze", isVegetarian: true },
+  { id: 205, name: "Feuilles de Vigne Farcies", description: "Riz, herbes fraîches, citron, pignons de pin", price: 90, category: "mezze", isVegetarian: true },
+  { id: 206, name: "Falafel", description: "Beignets de pois chiches croustillants, tahini, herbes", price: 75, category: "mezze", isVegetarian: true },
+  { id: 207, name: "Olives Marinées", description: "Olives mélangées, agrumes, fenouil, ail", price: 50, category: "mezze", isVegetarian: true },
+  { id: 208, name: "Taboulé", description: "Boulgour, persil, menthe, citron, tomate", price: 70, category: "mezze", isVegetarian: true },
+  { id: 209, name: "Fattoush", description: "Salade croquante, vinaigrette au sumac, chips de pita", price: 80, category: "mezze", isVegetarian: true },
+  { id: 210, name: "Amandes Épicées", description: "Rôties, paprika fumé, fleur de sel", price: 45, category: "mezze", isVegetarian: true },
+  { id: 211, name: "Sambousek", description: "Feuilletés à l'agneau épicé, yaourt à la menthe", price: 95, category: "mezze" },
 
   // SALADS — Les Salades
-  { id: 301, name: "Salade Marocaine", description: "Tomato, cucumber, onion, olives, mint", price: 80, category: "salads", isVegetarian: true, isChefsRec: true, image: "/picts/menu/salads.jpg" },
-  { id: 302, name: "Salade César", description: "Romaine, parmesan, croutons, anchovy", price: 110, category: "salads" },
-  { id: 303, name: "Salade Niçoise", description: "Tuna, eggs, anchovies, olives, beans", price: 130, category: "salads" },
-  { id: 304, name: "Salade Quinoa", description: "Quinoa, roasted vegetables, fresh herbs", price: 105, category: "salads", isVegetarian: true },
-  { id: 305, name: "Salade de Chèvre", description: "Warm goat cheese, walnuts, honey, greens", price: 120, category: "salads", isVegetarian: true },
-  { id: 306, name: "Salade Grecque", description: "Feta, olives, cucumber, tomato, oregano", price: 95, category: "salads", isVegetarian: true },
-  { id: 307, name: "Salade de Poulet", description: "Grilled chicken, mixed greens, balsamic", price: 115, category: "salads" },
-  { id: 308, name: "Salade Caprese", description: "Mozzarella, tomato, basil, balsamic glaze", price: 100, category: "salads", isVegetarian: true },
-  { id: 309, name: "Salade Forestière", description: "Mushrooms, lardons, soft egg, herbs", price: 125, category: "salads" },
-  { id: 310, name: "Salade aux Pois Chiches", description: "Chickpeas, peppers, lemon, parsley", price: 85, category: "salads", isVegetarian: true },
-  { id: 311, name: "Salade de Saumon Fumé", description: "Smoked salmon, dill, lemon, capers", price: 145, category: "salads" },
+  { id: 301, name: "Salade Marocaine", description: "Tomate, concombre, oignon, olives, menthe", price: 80, category: "salads", isVegetarian: true, isChefsRec: true, image: "/picts/menu/salads.jpg" },
+  { id: 302, name: "Salade César", description: "Romaine, parmesan, croûtons, anchois", price: 110, category: "salads" },
+  { id: 303, name: "Salade Niçoise", description: "Thon, œufs, anchois, olives, haricots", price: 130, category: "salads" },
+  { id: 304, name: "Salade Quinoa", description: "Quinoa, légumes rôtis, herbes fraîches", price: 105, category: "salads", isVegetarian: true },
+  { id: 305, name: "Salade de Chèvre", description: "Chèvre chaud, noix, miel, jeunes pousses", price: 120, category: "salads", isVegetarian: true },
+  { id: 306, name: "Salade Grecque", description: "Feta, olives, concombre, tomate, origan", price: 95, category: "salads", isVegetarian: true },
+  { id: 307, name: "Salade de Poulet", description: "Poulet grillé, mesclun, balsamique", price: 115, category: "salads" },
+  { id: 308, name: "Salade Caprese", description: "Mozzarella, tomate, basilic, glaçage balsamique", price: 100, category: "salads", isVegetarian: true },
+  { id: 309, name: "Salade Forestière", description: "Champignons, lardons, œuf mollet, herbes", price: 125, category: "salads" },
+  { id: 310, name: "Salade aux Pois Chiches", description: "Pois chiches, poivrons, citron, persil", price: 85, category: "salads", isVegetarian: true },
+  { id: 311, name: "Salade de Saumon Fumé", description: "Saumon fumé, aneth, citron, câpres", price: 145, category: "salads" },
 
   // SOUPS — Les Soupes
-  { id: 12, name: "Harira", description: "Tomato, lentils, chickpeas, fresh herbs", price: 60, category: "soups", isChefsRec: true, isVegetarian: true, image: "/picts/menu/soups.jpg" },
-  { id: 13, name: "Bissara", description: "Fava bean velouté, cumin, olive oil", price: 55, category: "soups", isVegetarian: true },
-  { id: 14, name: "Chorba", description: "Lamb broth, vermicelli, saffron", price: 75, category: "soups" },
-  { id: 15, name: "Lentil Soup", description: "Spiced red lentils, lemon, coriander", price: 60, category: "soups", isVegetarian: true },
-  { id: 16, name: "Tomato Bisque", description: "Roasted tomato, basil cream, croutons", price: 65, category: "soups", isVegetarian: true },
-  { id: 17, name: "French Onion Gratin", description: "Caramelized onion, gruyère, baguette", price: 80, category: "soups" },
-  { id: 18, name: "Mushroom Velouté", description: "Wild mushrooms, truffle oil, chives", price: 85, category: "soups", isVegetarian: true },
-  { id: 19, name: "Pumpkin Soup", description: "Roasted pumpkin, ginger, coconut", price: 70, category: "soups", isVegetarian: true },
-  { id: 20, name: "Carrot Coriander", description: "Spiced carrot, cumin, fresh herbs", price: 65, category: "soups", isVegetarian: true },
-  { id: 21, name: "Mediterranean Fish Soup", description: "Rockfish, saffron, rouille, croutons", price: 95, category: "soups" },
-  { id: 22, name: "Gazpacho Andalou", description: "Chilled tomato, cucumber, sherry vinegar", price: 70, category: "soups", isVegetarian: true },
+  { id: 12, name: "Harira", description: "Tomate, lentilles, pois chiches, herbes fraîches", price: 60, category: "soups", isChefsRec: true, isVegetarian: true, image: "/picts/menu/soups.jpg" },
+  { id: 13, name: "Bissara", description: "Velouté de fèves, cumin, huile d'olive", price: 55, category: "soups", isVegetarian: true },
+  { id: 14, name: "Chorba", description: "Bouillon d'agneau, vermicelles, safran", price: 75, category: "soups" },
+  { id: 15, name: "Soupe de Lentilles", description: "Lentilles rouges épicées, citron, coriandre", price: 60, category: "soups", isVegetarian: true },
+  { id: 16, name: "Bisque de Tomate", description: "Tomate rôtie, crème au basilic, croûtons", price: 65, category: "soups", isVegetarian: true },
+  { id: 17, name: "Gratinée à l'Oignon", description: "Oignon caramélisé, gruyère, baguette", price: 80, category: "soups" },
+  { id: 18, name: "Velouté de Champignons", description: "Champignons sauvages, huile de truffe, ciboulette", price: 85, category: "soups", isVegetarian: true },
+  { id: 19, name: "Soupe de Potiron", description: "Potiron rôti, gingembre, noix de coco", price: 70, category: "soups", isVegetarian: true },
+  { id: 20, name: "Carotte-Coriandre", description: "Carotte épicée, cumin, herbes fraîches", price: 65, category: "soups", isVegetarian: true },
+  { id: 21, name: "Soupe de Poisson Méditerranéenne", description: "Poisson de roche, safran, rouille, croûtons", price: 95, category: "soups" },
+  { id: 22, name: "Gazpacho Andalou", description: "Tomate glacée, concombre, vinaigre de Xérès", price: 70, category: "soups", isVegetarian: true },
 
   // TAGINES — Les Tagines
-  { id: 23, name: "Rfissa", description: "Slow-cooked with apricots, almonds & spices", price: 320, category: "tagines", isChefsRec: true, image: "/picts/menu/lamb-tagine.jpg" },
-  { id: 24, name: "Chicken & Preserved Lemon", description: "Olives, ginger, saffron, fresh coriander", price: 240, category: "tagines" },
-  { id: 25, name: "Kefta Mkaouara", description: "Spiced meatballs, eggs, tomato sauce", price: 220, category: "tagines" },
-  { id: 26, name: "Vegetable Tagine", description: "Seven vegetables, saffron, ras el hanout", price: 180, category: "tagines", isVegetarian: true },
-  { id: 27, name: "Lamb & Prunes", description: "Slow-braised lamb, prunes, sesame, almonds", price: 310, category: "tagines" },
-  { id: 28, name: "Mrouzia", description: "Lamb, honey, almonds, ras el hanout", price: 330, category: "tagines" },
-  { id: 29, name: "Chicken Mqualli", description: "Olives, lemon confit, saffron", price: 230, category: "tagines" },
-  { id: 30, name: "Fish Tagine Mqualli", description: "Sea bream, tomato, peppers, chermoula", price: 285, category: "tagines" },
-  { id: 31, name: "Beef & Quince", description: "Slow-braised beef, quince, cinnamon", price: 295, category: "tagines" },
-  { id: 32, name: "Berber Tagine", description: "Seven vegetables, herbs, smen butter", price: 175, category: "tagines", isVegetarian: true },
-  { id: 33, name: "Chicken & Almonds", description: "Confit chicken, blanched almonds, raisins", price: 245, category: "tagines" },
+  { id: 23, name: "Rfissa", description: "Mijoté aux abricots, amandes & épices", price: 320, category: "tagines", isChefsRec: true, image: "/picts/menu/lamb-tagine.jpg" },
+  { id: 24, name: "Poulet & Citron Confit", description: "Olives, gingembre, safran, coriandre fraîche", price: 240, category: "tagines" },
+  { id: 25, name: "Kefta Mkaouara", description: "Boulettes épicées, œufs, sauce tomate", price: 220, category: "tagines" },
+  { id: 26, name: "Tajine de Légumes", description: "Sept légumes, safran, ras el hanout", price: 180, category: "tagines", isVegetarian: true },
+  { id: 27, name: "Agneau aux Pruneaux", description: "Agneau mijoté, pruneaux, sésame, amandes", price: 310, category: "tagines" },
+  { id: 28, name: "Mrouzia", description: "Agneau, miel, amandes, ras el hanout", price: 330, category: "tagines" },
+  { id: 29, name: "Poulet Mqualli", description: "Olives, citron confit, safran", price: 230, category: "tagines" },
+  { id: 30, name: "Tajine de Poisson Mqualli", description: "Dorade, tomate, poivrons, chermoula", price: 285, category: "tagines" },
+  { id: 31, name: "Bœuf au Coing", description: "Bœuf mijoté, coing, cannelle", price: 295, category: "tagines" },
+  { id: 32, name: "Tajine Berbère", description: "Sept légumes, herbes, beurre smen", price: 175, category: "tagines", isVegetarian: true },
+  { id: 33, name: "Poulet aux Amandes", description: "Poulet confit, amandes émondées, raisins secs", price: 245, category: "tagines" },
 
   // COUSCOUS — Les Couscous
-  { id: 34, name: "Royal Couscous", description: "Lamb, chicken, merguez, seven vegetables", price: 280, category: "couscous", isChefsRec: true, image: "/picts/menu/couscous.jpg" },
-  { id: 35, name: "Chicken Couscous", description: "Confit chicken, caramelized onions, raisins", price: 220, category: "couscous" },
-  { id: 36, name: "Tfaya", description: "Lamb, sweet onions, cinnamon, golden raisins", price: 260, category: "couscous" },
-  { id: 37, name: "Vegetable Couscous", description: "Seasonal vegetables, chickpeas, herbs", price: 160, category: "couscous", isVegetarian: true },
-  { id: 38, name: "Couscous Belboula", description: "Hearty barley couscous, vegetables", price: 200, category: "couscous", isVegetarian: true },
-  { id: 39, name: "Couscous au Poisson", description: "White fish, vegetables, aromatic broth", price: 270, category: "couscous" },
-  { id: 40, name: "Couscous Seffa", description: "Sweet vermicelli, almonds, cinnamon sugar", price: 145, category: "couscous", isVegetarian: true },
-  { id: 41, name: "Couscous Tfaya Beef", description: "Tender beef, onion confit, sweet glaze", price: 275, category: "couscous" },
-  { id: 42, name: "Couscous d'Agadir", description: "Argan oil, regional spices, herbs", price: 210, category: "couscous", isVegetarian: true },
-  { id: 43, name: "Couscous Berber", description: "Mountain style, milk, dates, butter", price: 195, category: "couscous", isVegetarian: true },
-  { id: 44, name: "Couscous Merguez", description: "Spicy lamb sausages, vegetables, harissa", price: 230, category: "couscous" },
+  { id: 34, name: "Couscous Royal", description: "Agneau, poulet, merguez, sept légumes", price: 280, category: "couscous", isChefsRec: true, image: "/picts/menu/couscous.jpg" },
+  { id: 35, name: "Couscous au Poulet", description: "Poulet confit, oignons caramélisés, raisins secs", price: 220, category: "couscous" },
+  { id: 36, name: "Tfaya", description: "Agneau, oignons doux, cannelle, raisins blonds", price: 260, category: "couscous" },
+  { id: 37, name: "Couscous aux Légumes", description: "Légumes de saison, pois chiches, herbes", price: 160, category: "couscous", isVegetarian: true },
+  { id: 38, name: "Couscous Belboula", description: "Couscous d'orge consistant, légumes", price: 200, category: "couscous", isVegetarian: true },
+  { id: 39, name: "Couscous au Poisson", description: "Poisson blanc, légumes, bouillon aromatique", price: 270, category: "couscous" },
+  { id: 40, name: "Couscous Seffa", description: "Vermicelles sucrés, amandes, sucre à la cannelle", price: 145, category: "couscous", isVegetarian: true },
+  { id: 41, name: "Couscous Tfaya au Bœuf", description: "Bœuf tendre, oignons confits, glaçage sucré", price: 275, category: "couscous" },
+  { id: 42, name: "Couscous d'Agadir", description: "Huile d'argan, épices régionales, herbes", price: 210, category: "couscous", isVegetarian: true },
+  { id: 43, name: "Couscous Berbère", description: "À la manière des montagnes, lait, dattes, beurre", price: 195, category: "couscous", isVegetarian: true },
+  { id: 44, name: "Couscous Merguez", description: "Saucisses d'agneau épicées, légumes, harissa", price: 230, category: "couscous" },
 
   // SEAFOOD — De la Mer
-  { id: 45, name: "Pan-Seared Sea Bass", description: "Saffron risotto, microgreens, lemon beurre blanc", price: 280, category: "seafood", isChefsRec: true, image: "/picts/menu/sea-bass.jpg" },
-  { id: 46, name: "Grilled Prawns", description: "Chermoula marinade, charred citrus", price: 295, category: "seafood" },
-  { id: 47, name: "Fish Tagine", description: "Sea bream, preserved lemon, olives, tomato", price: 260, category: "seafood" },
-  { id: 48, name: "Seafood Paella", description: "Saffron rice, prawns, mussels, calamari", price: 320, category: "seafood", image: "/picts/menu/seafood-paella.jpg" },
-  { id: 49, name: "Grilled Salmon", description: "Herb crust, citrus salad, olive tapenade", price: 270, category: "seafood", image: "/picts/menu/salmon.jpg" },
-  { id: 50, name: "Calamari Grillés", description: "Charred squid, garlic, parsley, lemon", price: 230, category: "seafood" },
-  { id: 51, name: "Mussels Marinière", description: "White wine, garlic, parsley, frites", price: 245, category: "seafood" },
-  { id: 52, name: "Lobster Thermidor", description: "Cognac cream, gruyère, fine herbs", price: 480, category: "seafood" },
-  { id: 53, name: "Sardines Grillées", description: "Chermoula, lemon, fresh herbs", price: 165, category: "seafood" },
-  { id: 54, name: "Crab Cakes", description: "Spiced crab, citrus remoulade, micro greens", price: 220, category: "seafood" },
-  { id: 55, name: "Sole Meunière", description: "Brown butter, lemon, capers, parsley", price: 310, category: "seafood" },
+  { id: 45, name: "Bar Saisi à la Poêle", description: "Risotto au safran, jeunes pousses, beurre blanc au citron", price: 280, category: "seafood", isChefsRec: true, image: "/picts/menu/sea-bass.jpg" },
+  { id: 46, name: "Crevettes Grillées", description: "Marinade chermoula, agrumes grillés", price: 295, category: "seafood" },
+  { id: 47, name: "Tajine de Poisson", description: "Dorade, citron confit, olives, tomate", price: 260, category: "seafood" },
+  { id: 48, name: "Paëlla aux Fruits de Mer", description: "Riz au safran, crevettes, moules, calamars", price: 320, category: "seafood", image: "/picts/menu/seafood-paella.jpg" },
+  { id: 49, name: "Saumon Grillé", description: "Croûte aux herbes, salade d'agrumes, tapenade d'olives", price: 270, category: "seafood", image: "/picts/menu/salmon.jpg" },
+  { id: 50, name: "Calamari Grillés", description: "Calamars grillés, ail, persil, citron", price: 230, category: "seafood" },
+  { id: 51, name: "Moules Marinière", description: "Vin blanc, ail, persil, frites", price: 245, category: "seafood" },
+  { id: 52, name: "Homard Thermidor", description: "Crème au cognac, gruyère, fines herbes", price: 480, category: "seafood" },
+  { id: 53, name: "Sardines Grillées", description: "Chermoula, citron, herbes fraîches", price: 165, category: "seafood" },
+  { id: 54, name: "Galettes de Crabe", description: "Crabe épicé, rémoulade aux agrumes, jeunes pousses", price: 220, category: "seafood" },
+  { id: 55, name: "Sole Meunière", description: "Beurre noisette, citron, câpres, persil", price: 310, category: "seafood" },
 
   // GRILLS — Les Grillades
-  { id: 56, name: "Lamb Mechoui", description: "Slow-roasted shoulder, cumin salt, bread", price: 320, category: "grills", isChefsRec: true, image: "/picts/menu/grills.jpg" },
-  { id: 57, name: "Mixed Grill Platter", description: "Lamb chops, kefta, merguez, brochettes", price: 350, category: "grills" },
-  { id: 58, name: "Brochettes de Boeuf", description: "Beef skewers, chimichurri marocain", price: 240, category: "grills" },
-  { id: 59, name: "Chicken Brochettes", description: "Marinated in ras el hanout, lemon, garlic", price: 200, category: "grills" },
-  { id: 60, name: "Filet Mignon", description: "Tenderloin 200g, pepper sauce, frites", price: 380, category: "grills" },
-  { id: 61, name: "Lamb Chops", description: "Herb-crusted, mint jus, roasted potatoes", price: 340, category: "grills" },
-  { id: 62, name: "Côte de Boeuf (for 2)", description: "Bone-in ribeye 800g, rosemary butter", price: 720, category: "grills" },
-  { id: 63, name: "Merguez Grillés", description: "Spicy lamb sausage, harissa, bread", price: 175, category: "grills" },
-  { id: 64, name: "Veal Chop", description: "Marsala glaze, sage, creamy polenta", price: 360, category: "grills" },
-  { id: 65, name: "T-Bone Steak", description: "600g, herb butter, grilled vegetables", price: 480, category: "grills" },
-  { id: 66, name: "Lamb Kebab Platter", description: "Skewered & spiced, saffron rice, salad", price: 280, category: "grills" },
+  { id: 56, name: "Méchoui d'Agneau", description: "Épaule rôtie lentement, sel au cumin, pain", price: 320, category: "grills", isChefsRec: true, image: "/picts/menu/grills.jpg" },
+  { id: 57, name: "Plateau Grillades Mixtes", description: "Côtelettes d'agneau, kefta, merguez, brochettes", price: 350, category: "grills" },
+  { id: 58, name: "Brochettes de Bœuf", description: "Brochettes de bœuf, chimichurri marocain", price: 240, category: "grills" },
+  { id: 59, name: "Brochettes de Poulet", description: "Marinées au ras el hanout, citron, ail", price: 200, category: "grills" },
+  { id: 60, name: "Filet Mignon", description: "Filet 200g, sauce au poivre, frites", price: 380, category: "grills" },
+  { id: 61, name: "Côtelettes d'Agneau", description: "Croûte aux herbes, jus à la menthe, pommes de terre rôties", price: 340, category: "grills" },
+  { id: 62, name: "Côte de Bœuf (pour 2)", description: "Entrecôte avec os 800g, beurre au romarin", price: 720, category: "grills" },
+  { id: 63, name: "Merguez Grillés", description: "Saucisse d'agneau épicée, harissa, pain", price: 175, category: "grills" },
+  { id: 64, name: "Côte de Veau", description: "Glaçage au marsala, sauge, polenta crémeuse", price: 360, category: "grills" },
+  { id: 65, name: "T-Bone Steak", description: "600g, beurre aux herbes, légumes grillés", price: 480, category: "grills" },
+  { id: 66, name: "Plateau de Brochettes d'Agneau", description: "En brochettes & épicé, riz au safran, salade", price: 280, category: "grills" },
 
   // PASTRIES — Pâtisseries Salées
-  { id: 67, name: "Pastilla au Pigeon", description: "Crispy filo, pigeon, almonds, cinnamon", price: 180, category: "pastries", isChefsRec: true, image: "/picts/menu/pastilla.jpg" },
-  { id: 68, name: "Pastilla au Poisson", description: "Filo with seafood, vermicelli, herbs", price: 165, category: "pastries" },
-  { id: 69, name: "Msemen", description: "Layered semolina pancake, honey, butter", price: 45, category: "pastries", isVegetarian: true },
-  { id: 70, name: "Baghrir", description: "Thousand-hole pancake, amlou, honey", price: 50, category: "pastries", isVegetarian: true },
-  { id: 71, name: "Brik à l'Œuf", description: "Crisp filo, runny egg, tuna, capers", price: 95, category: "pastries" },
-  { id: 72, name: "Sambousek Lamb", description: "Spiced lamb pastry, mint yogurt", price: 110, category: "pastries" },
-  { id: 73, name: "Fatayer Sabanikh", description: "Spinach pastry, sumac, pine nuts", price: 85, category: "pastries", isVegetarian: true },
-  { id: 74, name: "Mhencha Salée", description: "Coiled almond pastry, savory filling", price: 120, category: "pastries" },
-  { id: 75, name: "Borek au Fromage", description: "Cheese-filled filo, sesame, honey", price: 95, category: "pastries", isVegetarian: true },
-  { id: 76, name: "Khoubz Khlea", description: "Bread filled with cured spiced beef", price: 105, category: "pastries" },
-  { id: 77, name: "Rghaif Berber", description: "Layered pastry, herbs, smen butter", price: 80, category: "pastries", isVegetarian: true },
+  { id: 67, name: "Pastilla au Pigeon", description: "Pâte filo croustillante, pigeon, amandes, cannelle", price: 180, category: "pastries", isChefsRec: true, image: "/picts/menu/pastilla.jpg" },
+  { id: 68, name: "Pastilla au Poisson", description: "Filo aux fruits de mer, vermicelles, herbes", price: 165, category: "pastries" },
+  { id: 69, name: "Msemen", description: "Crêpe de semoule feuilletée, miel, beurre", price: 45, category: "pastries", isVegetarian: true },
+  { id: 70, name: "Baghrir", description: "Crêpe aux mille trous, amlou, miel", price: 50, category: "pastries", isVegetarian: true },
+  { id: 71, name: "Brik à l'Œuf", description: "Filo croustillant, œuf coulant, thon, câpres", price: 95, category: "pastries" },
+  { id: 72, name: "Sambousek à l'Agneau", description: "Feuilleté à l'agneau épicé, yaourt à la menthe", price: 110, category: "pastries" },
+  { id: 73, name: "Fatayer Sabanikh", description: "Feuilleté aux épinards, sumac, pignons de pin", price: 85, category: "pastries", isVegetarian: true },
+  { id: 74, name: "Mhencha Salée", description: "Pâte aux amandes en serpentin, farce salée", price: 120, category: "pastries" },
+  { id: 75, name: "Borek au Fromage", description: "Filo au fromage, sésame, miel", price: 95, category: "pastries", isVegetarian: true },
+  { id: 76, name: "Khoubz Khlea", description: "Pain farci au bœuf séché épicé", price: 105, category: "pastries" },
+  { id: 77, name: "Rghaif Berbère", description: "Pâte feuilletée, herbes, beurre smen", price: 80, category: "pastries", isVegetarian: true },
 
   // DESSERTS — Les Douceurs
-  { id: 78, name: "Chocolate Fondant", description: "Molten center, vanilla ice cream, berry coulis", price: 120, category: "desserts", isChefsRec: true, image: "/picts/menu/chocolate-fondant.jpg" },
-  { id: 79, name: "Pastilla au Lait", description: "Crisp filo, milk cream, orange blossom", price: 95, category: "desserts" },
-  { id: 80, name: "Chebakia", description: "Sesame-honey rosettes, traditional", price: 60, category: "desserts", isVegetarian: true },
-  { id: 81, name: "Seffa", description: "Sweet vermicelli, almonds, cinnamon", price: 80, category: "desserts", isVegetarian: true },
-  { id: 82, name: "Fresh Fruit Plate", description: "Seasonal Moroccan fruits, mint", price: 65, category: "desserts", isVegetarian: true },
-  { id: 83, name: "Crème Brûlée", description: "Vanilla custard, caramelized sugar", price: 90, category: "desserts", isVegetarian: true },
-  { id: 84, name: "Tarte Tatin", description: "Caramelized apple, flaky pastry, cream", price: 95, category: "desserts", isVegetarian: true },
-  { id: 85, name: "Tiramisu", description: "Mascarpone, espresso, cocoa", price: 100, category: "desserts", isVegetarian: true },
-  { id: 86, name: "Mahalabia", description: "Almond milk pudding, rose water, pistachio", price: 75, category: "desserts", isVegetarian: true },
-  { id: 87, name: "Sorbet Trio", description: "Three seasonal sorbets, candied citrus", price: 85, category: "desserts", isVegetarian: true },
-  { id: 88, name: "Briouats au Miel", description: "Almond pastries soaked in honey", price: 70, category: "desserts", isVegetarian: true },
+  { id: 78, name: "Fondant au Chocolat", description: "Cœur coulant, glace vanille, coulis de fruits rouges", price: 120, category: "desserts", isChefsRec: true, image: "/picts/menu/chocolate-fondant.jpg" },
+  { id: 79, name: "Pastilla au Lait", description: "Filo croustillant, crème au lait, fleur d'oranger", price: 95, category: "desserts" },
+  { id: 80, name: "Chebakia", description: "Rosaces au sésame et au miel, traditionnel", price: 60, category: "desserts", isVegetarian: true },
+  { id: 81, name: "Seffa", description: "Vermicelles sucrés, amandes, cannelle", price: 80, category: "desserts", isVegetarian: true },
+  { id: 82, name: "Assiette de Fruits Frais", description: "Fruits marocains de saison, menthe", price: 65, category: "desserts", isVegetarian: true },
+  { id: 83, name: "Crème Brûlée", description: "Crème à la vanille, sucre caramélisé", price: 90, category: "desserts", isVegetarian: true },
+  { id: 84, name: "Tarte Tatin", description: "Pomme caramélisée, pâte feuilletée, crème", price: 95, category: "desserts", isVegetarian: true },
+  { id: 85, name: "Tiramisu", description: "Mascarpone, espresso, cacao", price: 100, category: "desserts", isVegetarian: true },
+  { id: 86, name: "Mahalabia", description: "Pudding au lait d'amande, eau de rose, pistache", price: 75, category: "desserts", isVegetarian: true },
+  { id: 87, name: "Trio de Sorbets", description: "Trois sorbets de saison, agrumes confits", price: 85, category: "desserts", isVegetarian: true },
+  { id: 88, name: "Briouats au Miel", description: "Feuilletés aux amandes trempés dans le miel", price: 70, category: "desserts", isVegetarian: true },
 
   // JUICES — Jus Frais
-  { id: 89, name: "Fresh Orange Juice", description: "Squeezed to order from Agadir oranges", price: 40, category: "juices", isChefsRec: true, image: "/picts/menu/orange-juice.jpg" },
-  { id: 90, name: "Avocado & Almond Shake", description: "Rich and creamy with honey, crushed almonds", price: 65, category: "juices", image: "/picts/menu/avocado-shake.jpg" },
-  { id: 91, name: "Virgin Mojito", description: "Muddled lime, mint, sugar, sparkling water", price: 75, category: "juices", image: "/picts/menu/virgin-mojito.jpg" },
-  { id: 92, name: "Seasonal Smoothie", description: "Local mango, banana, strawberry", price: 55, category: "juices", image: "/picts/menu/fruit-smoothie.jpg" },
-  { id: 93, name: "Pomegranate Press", description: "Pressed pomegranate, rose water hint", price: 60, category: "juices" },
-  { id: 94, name: "Lemon-Mint", description: "Fresh lemonade, crushed mint, agave", price: 45, category: "juices", image: "/picts/menu/lemon-juice.jpg" },
-  { id: 95, name: "Carrot-Ginger", description: "Cold-pressed, energizing, lemon", price: 50, category: "juices" },
-  { id: 96, name: "Watermelon Cooler", description: "Mint, lime, sparkling water", price: 55, category: "juices" },
-  { id: 97, name: "Mango Lassi", description: "Yogurt, mango, cardamom, honey", price: 60, category: "juices" },
-  { id: 98, name: "Beetroot & Apple", description: "Pressed, fresh ginger, lemon", price: 55, category: "juices" },
-  { id: 99, name: "Detox Green", description: "Cucumber, celery, apple, mint, lemon", price: 60, category: "juices" },
+  { id: 89, name: "Jus d'Orange Frais", description: "Pressé à la commande à partir d'oranges d'Agadir", price: 40, category: "juices", isChefsRec: true, image: "/picts/menu/orange-juice.jpg" },
+  { id: 90, name: "Milkshake Avocat & Amande", description: "Riche et crémeux au miel, amandes concassées", price: 65, category: "juices", image: "/picts/menu/avocado-shake.jpg" },
+  { id: 91, name: "Mojito Sans Alcool", description: "Citron vert pilé, menthe, sucre, eau pétillante", price: 75, category: "juices", image: "/picts/menu/virgin-mojito.jpg" },
+  { id: 92, name: "Smoothie de Saison", description: "Mangue locale, banane, fraise", price: 55, category: "juices", image: "/picts/menu/fruit-smoothie.jpg" },
+  { id: 93, name: "Jus de Grenade Pressé", description: "Grenade pressée, soupçon d'eau de rose", price: 60, category: "juices" },
+  { id: 94, name: "Citron-Menthe", description: "Limonade fraîche, menthe pilée, agave", price: 45, category: "juices", image: "/picts/menu/lemon-juice.jpg" },
+  { id: 95, name: "Carotte-Gingembre", description: "Pressé à froid, énergisant, citron", price: 50, category: "juices" },
+  { id: 96, name: "Rafraîchissement Pastèque", description: "Menthe, citron vert, eau pétillante", price: 55, category: "juices" },
+  { id: 97, name: "Lassi à la Mangue", description: "Yaourt, mangue, cardamome, miel", price: 60, category: "juices" },
+  { id: 98, name: "Betterave & Pomme", description: "Pressé, gingembre frais, citron", price: 55, category: "juices" },
+  { id: 99, name: "Détox Vert", description: "Concombre, céleri, pomme, menthe, citron", price: 60, category: "juices" },
 
   // MOCKTAILS — Mocktails Signés (alcohol-free signature drinks)
-  { id: 401, name: "La Breva Spritz", description: "Sparkling apple, blood orange, rosemary", price: 80, category: "mocktails", isChefsRec: true, image: "/picts/menu/cocktails.jpg" },
-  { id: 402, name: "Atlas Cooler", description: "Cucumber, mint, lime, tonic water", price: 70, category: "mocktails" },
-  { id: 403, name: "Medina Spice", description: "Ginger beer, lime, pomegranate, mint", price: 75, category: "mocktails" },
-  { id: 404, name: "Casablanca Breeze", description: "Elderflower, cucumber, lime, soda", price: 75, category: "mocktails" },
-  { id: 405, name: "Sahara Sunset", description: "Mango, passion fruit, lime, sparkling water", price: 80, category: "mocktails" },
-  { id: 406, name: "Berber Mojito", description: "Mint, lime, brown sugar, soda", price: 70, category: "mocktails" },
-  { id: 407, name: "Rose & Cardamom", description: "Rose water, cardamom syrup, lemonade", price: 75, category: "mocktails" },
-  { id: 408, name: "Argan Whisper", description: "Argan honey, citrus, ginger", price: 85, category: "mocktails" },
-  { id: 409, name: "Saffron Tonic", description: "Saffron syrup, tonic, lemon zest", price: 90, category: "mocktails" },
-  { id: 410, name: "Fes Garden", description: "Hibiscus, rose, lime, sparkling", price: 75, category: "mocktails" },
-  { id: 411, name: "Spice Route", description: "Cinnamon, orange, ginger, honey", price: 80, category: "mocktails" },
+  { id: 401, name: "La Breva Spritz", description: "Pomme pétillante, orange sanguine, romarin", price: 80, category: "mocktails", isChefsRec: true, image: "/picts/menu/cocktails.jpg" },
+  { id: 402, name: "Atlas Cooler", description: "Concombre, menthe, citron vert, eau tonique", price: 70, category: "mocktails" },
+  { id: 403, name: "Medina Spice", description: "Ginger beer, citron vert, grenade, menthe", price: 75, category: "mocktails" },
+  { id: 404, name: "Casablanca Breeze", description: "Sureau, concombre, citron vert, soda", price: 75, category: "mocktails" },
+  { id: 405, name: "Sahara Sunset", description: "Mangue, fruit de la passion, citron vert, eau pétillante", price: 80, category: "mocktails" },
+  { id: 406, name: "Mojito Berbère", description: "Menthe, citron vert, sucre roux, soda", price: 70, category: "mocktails" },
+  { id: 407, name: "Rose & Cardamome", description: "Eau de rose, sirop de cardamome, limonade", price: 75, category: "mocktails" },
+  { id: 408, name: "Argan Whisper", description: "Miel d'argan, agrumes, gingembre", price: 85, category: "mocktails" },
+  { id: 409, name: "Saffron Tonic", description: "Sirop de safran, tonic, zeste de citron", price: 90, category: "mocktails" },
+  { id: 410, name: "Fes Garden", description: "Hibiscus, rose, citron vert, pétillant", price: 75, category: "mocktails" },
+  { id: 411, name: "Spice Route", description: "Cannelle, orange, gingembre, miel", price: 80, category: "mocktails" },
 
   // ICE CREAM & SORBETS — Glaces & Sorbets
-  { id: 501, name: "Saffron & Cardamom", description: "Slow-churned, exotic spices, pistachio dust", price: 75, category: "icecream", isChefsRec: true, isVegetarian: true, image: "/picts/menu/icecream.jpg" },
-  { id: 502, name: "Vanilla Bean", description: "Madagascan vanilla, fresh cream", price: 60, category: "icecream", isVegetarian: true },
-  { id: 503, name: "Pistachio Gelato", description: "Sicilian pistachios, honey drizzle", price: 70, category: "icecream", isVegetarian: true },
-  { id: 504, name: "Rose Sorbet", description: "Petal infused, light, refreshing", price: 65, category: "icecream", isVegetarian: true },
-  { id: 505, name: "Mint Chocolate Chip", description: "Fresh mint, dark chocolate shards", price: 65, category: "icecream", isVegetarian: true },
-  { id: 506, name: "Atlas Lemon Sorbet", description: "Cold-pressed lemons, mountain mint", price: 60, category: "icecream", isVegetarian: true },
-  { id: 507, name: "Strawberry Sorbet", description: "Seasonal berries, balsamic reduction", price: 60, category: "icecream", isVegetarian: true },
-  { id: 508, name: "Raspberry Sorbet", description: "Tart and bright, fresh basil", price: 60, category: "icecream", isVegetarian: true },
-  { id: 509, name: "Argan Caramel", description: "Liquid gold caramel, sea salt", price: 75, category: "icecream", isVegetarian: true },
-  { id: 510, name: "Affogato", description: "Vanilla ice cream, hot espresso pour", price: 70, category: "icecream", isVegetarian: true },
-  { id: 511, name: "Coupe Royale", description: "Three scoops, sauce & toppings of choice", price: 110, category: "icecream", isVegetarian: true },
+  { id: 501, name: "Safran & Cardamome", description: "Baratté lentement, épices exotiques, poudre de pistache", price: 75, category: "icecream", isChefsRec: true, isVegetarian: true, image: "/picts/menu/icecream.jpg" },
+  { id: 502, name: "Vanille en Gousse", description: "Vanille de Madagascar, crème fraîche", price: 60, category: "icecream", isVegetarian: true },
+  { id: 503, name: "Gelato Pistache", description: "Pistaches siciliennes, filet de miel", price: 70, category: "icecream", isVegetarian: true },
+  { id: 504, name: "Sorbet à la Rose", description: "Infusé aux pétales, léger, rafraîchissant", price: 65, category: "icecream", isVegetarian: true },
+  { id: 505, name: "Menthe & Pépites de Chocolat", description: "Menthe fraîche, éclats de chocolat noir", price: 65, category: "icecream", isVegetarian: true },
+  { id: 506, name: "Sorbet Citron de l'Atlas", description: "Citrons pressés à froid, menthe de montagne", price: 60, category: "icecream", isVegetarian: true },
+  { id: 507, name: "Sorbet Fraise", description: "Fruits rouges de saison, réduction balsamique", price: 60, category: "icecream", isVegetarian: true },
+  { id: 508, name: "Sorbet Framboise", description: "Acidulé et éclatant, basilic frais", price: 60, category: "icecream", isVegetarian: true },
+  { id: 509, name: "Caramel à l'Argan", description: "Caramel or liquide, fleur de sel", price: 75, category: "icecream", isVegetarian: true },
+  { id: 510, name: "Affogato", description: "Glace vanille, espresso chaud versé", price: 70, category: "icecream", isVegetarian: true },
+  { id: 511, name: "Coupe Royale", description: "Trois boules, sauce & garnitures au choix", price: 110, category: "icecream", isVegetarian: true },
 
   // TEA & COFFEE — Thé & Café
-  { id: 100, name: "Moroccan Mint Tea", description: "Fresh mint, green tea, traditional pour", price: 45, category: "tea", isChefsRec: true, image: "/picts/menu/mint-tea.jpg" },
-  { id: 601, name: "Saffron Tea", description: "Honey, lemon, threads of saffron", price: 55, category: "tea" },
-  { id: 602, name: "Espresso", description: "Single-origin Atlas roast", price: 30, category: "tea" },
-  { id: 603, name: "Double Espresso", description: "Atlas roast, full-bodied", price: 40, category: "tea" },
-  { id: 604, name: "Café Noir", description: "Strong filter coffee, cardamom edge", price: 35, category: "tea" },
-  { id: 605, name: "Nous-Nous", description: "Half coffee, half steamed milk", price: 40, category: "tea" },
-  { id: 606, name: "Cappuccino", description: "Espresso, foamed milk, cocoa dust", price: 45, category: "tea" },
-  { id: 607, name: "Iced Latte", description: "Cold brew, milk, vanilla syrup", price: 50, category: "tea" },
-  { id: 608, name: "Verbena Tea", description: "Calming, citrus notes, honey", price: 40, category: "tea" },
-  { id: 609, name: "Chai Tea Latte", description: "Spiced black tea, steamed milk", price: 50, category: "tea" },
-  { id: 610, name: "Hot Chocolate", description: "Dark chocolate, whipped cream, cocoa", price: 55, category: "tea" },
+  { id: 100, name: "Thé à la Menthe Marocain", description: "Menthe fraîche, thé vert, service traditionnel", price: 45, category: "tea", isChefsRec: true, image: "/picts/menu/mint-tea.jpg" },
+  { id: 601, name: "Thé au Safran", description: "Miel, citron, filaments de safran", price: 55, category: "tea" },
+  { id: 602, name: "Espresso", description: "Torréfaction Atlas, origine unique", price: 30, category: "tea" },
+  { id: 603, name: "Double Espresso", description: "Torréfaction Atlas, corsé", price: 40, category: "tea" },
+  { id: 604, name: "Café Noir", description: "Café filtre fort, touche de cardamome", price: 35, category: "tea" },
+  { id: 605, name: "Nous-Nous", description: "Moitié café, moitié lait chaud", price: 40, category: "tea" },
+  { id: 606, name: "Cappuccino", description: "Espresso, lait mousseux, poudre de cacao", price: 45, category: "tea" },
+  { id: 607, name: "Latte Glacé", description: "Cold brew, lait, sirop de vanille", price: 50, category: "tea" },
+  { id: 608, name: "Tisane de Verveine", description: "Apaisante, notes d'agrumes, miel", price: 40, category: "tea" },
+  { id: 609, name: "Chai Tea Latte", description: "Thé noir épicé, lait chaud", price: 50, category: "tea" },
+  { id: 610, name: "Chocolat Chaud", description: "Chocolat noir, crème fouettée, cacao", price: 55, category: "tea" },
 ];
 
 type CourseDef = {
@@ -242,21 +244,21 @@ type CourseDef = {
 };
 
 const COURSE_ORDER: CourseDef[] = [
-  { key: "breakfast", title: "Breakfast", french: "Petit Déjeuner", Icon: Egg },
-  { key: "starters", title: "Starters", french: "Pour Commencer", Icon: UtensilsCrossed },
-  { key: "mezze", title: "Mezze", french: "Petites Assiettes", Icon: Sandwich },
-  { key: "salads", title: "Salads", french: "Les Salades", Icon: Salad },
-  { key: "soups", title: "Soups", french: "Les Soupes", Icon: Soup },
-  { key: "tagines", title: "Tagines", french: "Les Tagines", Icon: Utensils },
+  { key: "breakfast", title: "Petit Déjeuner", french: "Petit Déjeuner", Icon: Egg },
+  { key: "starters", title: "Entrées", french: "Pour Commencer", Icon: UtensilsCrossed },
+  { key: "mezze", title: "Mezzés", french: "Petites Assiettes", Icon: Sandwich },
+  { key: "salads", title: "Salades", french: "Les Salades", Icon: Salad },
+  { key: "soups", title: "Soupes", french: "Les Soupes", Icon: Soup },
+  { key: "tagines", title: "Tajines", french: "Les Tagines", Icon: Utensils },
   { key: "couscous", title: "Couscous", french: "Les Couscous", Icon: Wheat },
-  { key: "seafood", title: "Seafood", french: "De la Mer", Icon: Fish },
-  { key: "grills", title: "Grills", french: "Les Grillades", Icon: Beef },
-  { key: "pastries", title: "Pastries", french: "Pâtisseries Salées", Icon: Croissant },
+  { key: "seafood", title: "Fruits de Mer", french: "De la Mer", Icon: Fish },
+  { key: "grills", title: "Grillades", french: "Les Grillades", Icon: Beef },
+  { key: "pastries", title: "Pâtisseries", french: "Pâtisseries Salées", Icon: Croissant },
   { key: "desserts", title: "Desserts", french: "Les Douceurs", Icon: Cookie },
-  { key: "juices", title: "Juices", french: "Jus Frais", Icon: GlassWater },
+  { key: "juices", title: "Jus", french: "Jus Frais", Icon: GlassWater },
   { key: "mocktails", title: "Mocktails", french: "Mocktails Signés", Icon: CupSoda },
-  { key: "icecream", title: "Ice Cream", french: "Glaces & Sorbets", Icon: IceCream2 },
-  { key: "tea", title: "Tea & Coffee", french: "Thé & Café", Icon: Coffee },
+  { key: "icecream", title: "Glaces", french: "Glaces & Sorbets", Icon: IceCream2 },
+  { key: "tea", title: "Thé & Café", french: "Thé & Café", Icon: Coffee },
 ];
 
 const RED = "#B0413E";
@@ -268,6 +270,237 @@ const PAGE_INK = "#5A4438";
 function scrollToId(id: string) {
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function ChefLetterClose() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const paperRef = useRef<HTMLDivElement>(null);
+  const signatureRef = useRef<SVGPathElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Paper unfurl from the center as you scroll into view
+      if (paperRef.current) {
+        gsap.fromTo(
+          paperRef.current,
+          { clipPath: "inset(48% 0% 48% 0%)", opacity: 0.3 },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            opacity: 1,
+            duration: 1.4,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      // Signature ink stroke draws in
+      if (signatureRef.current) {
+        const length = signatureRef.current.getTotalLength();
+        gsap.set(signatureRef.current, {
+          strokeDasharray: length,
+          strokeDashoffset: length,
+          opacity: 1,
+        });
+        gsap.to(signatureRef.current, {
+          strokeDashoffset: 0,
+          duration: 2.4,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 55%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="menu-close"
+      className="relative px-6 py-12 md:py-16 overflow-hidden"
+      style={{
+        background: "linear-gradient(180deg, #E8D5C0 0%, #D4A574 55%, #B8895A 100%)",
+      }}
+    >
+      {/* Paper grain texture */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.10] mix-blend-multiply"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* Soft glow behind the letter */}
+      <div
+        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full"
+        style={{
+          background: "radial-gradient(circle, rgba(255,255,255,0.45) 0%, transparent 60%)",
+          filter: "blur(60px)",
+        }}
+      />
+
+      {/* Deckled top edge ornament */}
+      <svg
+        aria-hidden="true"
+        className="absolute top-0 left-0 right-0 w-full h-3 text-[#3C2415]/12"
+        viewBox="0 0 400 12"
+        preserveAspectRatio="none"
+      >
+        <path d="M0,12 L0,6 Q10,0 20,6 T40,6 T60,6 T80,6 T100,6 T120,6 T140,6 T160,6 T180,6 T200,6 T220,6 T240,6 T260,6 T280,6 T300,6 T320,6 T340,6 T360,6 T380,6 T400,6 L400,12 Z" fill="currentColor" />
+      </svg>
+
+      <div
+        ref={paperRef}
+        className="relative max-w-3xl mx-auto text-center"
+        style={{ color: "#3C2415" }}
+      >
+        {/* Eyebrow */}
+        <motion.p
+          initial={{ opacity: 0, letterSpacing: "0.15em" }}
+          whileInView={{ opacity: 1, letterSpacing: "0.5em" }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 1.1, delay: 0.2 }}
+          className="font-mono text-[12px] md:text-[14px] font-bold uppercase mb-6"
+          style={{ color: "#4A2F1C" }}
+        >
+          Une Lettre du Chef
+        </motion.p>
+
+        {/* Main quote — large script */}
+        <motion.h2
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 1.2, ease: EASE_OUT_EXPO, delay: 0.35 }}
+          className="font-accent font-semibold italic text-[clamp(1.7rem,4.4vw,2.85rem)] leading-[1.18] max-w-2xl mx-auto mb-8"
+          style={{ color: "#2A1810" }}
+        >
+          &ldquo;Une carte est une lettre. Lisez-la lentement et répondez par une assiette vide.&rdquo;
+        </motion.h2>
+
+        {/* Signature block */}
+        <div className="mb-7">
+          <svg
+            viewBox="0 0 280 50"
+            className="mx-auto block w-[260px] md:w-[300px] h-[44px] md:h-[50px]"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              ref={signatureRef}
+              d="M 18 32 C 32 8, 48 42, 64 24 C 78 8, 92 38, 108 22 C 122 6, 138 36, 152 26 C 168 14, 184 40, 200 28 C 216 14, 232 36, 248 24 C 256 18, 262 22, 265 30"
+              stroke="#3C2415"
+              strokeWidth="1.6"
+              fill="none"
+              strokeLinecap="round"
+              opacity="0"
+            />
+          </svg>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 1.8, duration: 0.8 }}
+            className="font-display font-semibold italic text-2xl md:text-3xl mt-1"
+            style={{ color: "#3C2415" }}
+          >
+            Krishna Chaithanya
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, letterSpacing: "0.15em" }}
+            whileInView={{ opacity: 1, letterSpacing: "0.3em" }}
+            viewport={{ once: true }}
+            transition={{ delay: 2.1, duration: 0.9 }}
+            className="font-mono text-[12px] md:text-[14px] font-bold uppercase mt-1.5"
+            style={{ color: "#4A2F1C" }}
+          >
+            Chef Cuisinier &middot; Maison La Breva
+          </motion.p>
+        </div>
+
+        {/* Vintage divider */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.1, delay: 0.4, ease: EASE_OUT_EXPO }}
+          className="flex items-center justify-center gap-3 mb-6 origin-center"
+        >
+          <span className="h-px w-12 bg-[#3C2415]/35" />
+          <span className="w-1.5 h-1.5 rotate-45 border" style={{ borderColor: "#8B5A2B" }} aria-hidden="true" />
+          <span className="h-px w-12 bg-[#3C2415]/35" />
+        </motion.div>
+
+        {/* Postscript line */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.9, delay: 0.5 }}
+          className="font-accent font-semibold italic text-lg md:text-2xl max-w-lg mx-auto mb-7 leading-relaxed"
+          style={{ color: "#5A4438" }}
+        >
+          Notre offre de ce soir se savoure le mieux à notre table, avec l&apos;appel à la prière qui monte de la médina.
+        </motion.p>
+
+        {/* CTA — stamped envelope style */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+          className="inline-block"
+        >
+          <motion.div
+            whileHover={{ scale: 1.04, y: -3 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 380, damping: 22 }}
+          >
+            <Link
+              to="/reservation"
+              className="group relative inline-flex items-center gap-3 px-10 py-4 text-[13px] md:text-[14px] font-bold tracking-[0.28em] uppercase rounded-none"
+              style={{
+                background: "#3C2415",
+                color: "#F5E6D3",
+                boxShadow:
+                  "0 8px 20px -6px rgba(60,36,21,0.5), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.25)",
+              }}
+            >
+              {/* Stamp postmark corners */}
+              <span aria-hidden="true" className="absolute top-1 left-1 w-2 h-2 border-l border-t border-[#F5E6D3]/30" />
+              <span aria-hidden="true" className="absolute top-1 right-1 w-2 h-2 border-r border-t border-[#F5E6D3]/30" />
+              <span aria-hidden="true" className="absolute bottom-1 left-1 w-2 h-2 border-l border-b border-[#F5E6D3]/30" />
+              <span aria-hidden="true" className="absolute bottom-1 right-1 w-2 h-2 border-r border-b border-[#F5E6D3]/30" />
+              <span>Réserver une Table</span>
+              <span className="group-hover:translate-x-1 transition-transform duration-500" aria-hidden="true">
+                &rarr;
+              </span>
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Deckled bottom edge */}
+      <svg
+        aria-hidden="true"
+        className="absolute bottom-0 left-0 right-0 w-full h-3 text-[#3C2415]/12 rotate-180"
+        viewBox="0 0 400 12"
+        preserveAspectRatio="none"
+      >
+        <path d="M0,12 L0,6 Q10,0 20,6 T40,6 T60,6 T80,6 T100,6 T120,6 T140,6 T160,6 T180,6 T200,6 T220,6 T240,6 T260,6 T280,6 T300,6 T320,6 T340,6 T360,6 T380,6 T400,6 L400,12 Z" fill="currentColor" />
+      </svg>
+    </section>
+  );
 }
 
 function CourseFloatingNav({ courses }: { courses: CourseDef[] }) {
@@ -308,7 +541,7 @@ function CourseFloatingNav({ courses }: { courses: CourseDef[] }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 30 }}
           transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40"
+          className="fixed inset-x-0 mx-auto w-fit z-40 bottom-6 md:bottom-8"
         >
           <div
             className="flex items-center gap-2 px-3 py-2 rounded-full shadow-[0_20px_50px_-15px_rgba(0,0,0,0.25)]"
@@ -325,7 +558,7 @@ function CourseFloatingNav({ courses }: { courses: CourseDef[] }) {
               whileHover={prev ? { scale: 1.08, x: -2 } : {}}
               whileTap={prev ? { scale: 0.92 } : {}}
               transition={{ type: "spring", stiffness: 400, damping: 22 }}
-              aria-label={prev ? `Previous course: ${prev.title}` : "No previous course"}
+              aria-label={prev ? `Service précédent : ${prev.title}` : "Aucun service précédent"}
               className={`flex items-center justify-center w-9 h-9 rounded-full transition-colors duration-300 ${
                 prev ? "cursor-pointer" : "cursor-not-allowed opacity-30"
               }`}
@@ -360,7 +593,7 @@ function CourseFloatingNav({ courses }: { courses: CourseDef[] }) {
               whileHover={next ? { scale: 1.08, x: 2 } : {}}
               whileTap={next ? { scale: 0.92 } : {}}
               transition={{ type: "spring", stiffness: 400, damping: 22 }}
-              aria-label={next ? `Next course: ${next.title}` : "No next course"}
+              aria-label={next ? `Service suivant : ${next.title}` : "Aucun service suivant"}
               className={`flex items-center justify-center w-9 h-9 rounded-full transition-colors duration-300 ${
                 next ? "cursor-pointer" : "cursor-not-allowed opacity-30"
               }`}
@@ -392,7 +625,7 @@ function FeaturedCard({ item }: { item: MenuItem }) {
         <div className="flex items-center gap-2 mb-4">
           <Sparkles className="w-4 h-4 text-white" strokeWidth={2.2} />
           <span className="font-mono font-bold text-[10px] tracking-[0.32em] uppercase text-white/95">
-            Dish of the Month
+            Plat du Mois
           </span>
         </div>
 
@@ -401,12 +634,12 @@ function FeaturedCard({ item }: { item: MenuItem }) {
         </h3>
 
         <p className="font-mono font-bold text-[10px] tracking-[0.22em] uppercase text-white/85 mb-3">
-          Chef&apos;s Signature · Available All Season
+          Signature du Chef · Disponible Toute la Saison
         </p>
 
         {item.description && (
           <p className="font-body text-[13px] md:text-sm text-white/85 leading-relaxed mb-5 max-w-md">
-            {item.description}. Served with our traditional ceremony and seasonal accompaniments.
+            {item.description}. Servi avec notre cérémonie traditionnelle et nos accompagnements de saison.
           </p>
         )}
 
@@ -446,7 +679,7 @@ function CourseColumn({ course, items }: { course: CourseDef; items: MenuItem[] 
       <p className="font-accent italic text-sm mb-5 ml-10" style={{ color: `${PAGE_INK}99` }}>
         {course.french}
         <span className="font-mono not-italic text-[10px] tracking-[0.25em] uppercase ml-2" style={{ color: RED }}>
-          · {String(items.length).padStart(2, "0")} dishes
+          · {String(items.length).padStart(2, "0")} plats
         </span>
       </p>
 
@@ -492,12 +725,12 @@ function CourseColumn({ course, items }: { course: CourseDef; items: MenuItem[] 
                   <span
                     className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0"
                     style={{ backgroundColor: RED }}
-                    aria-label="Chef's pick"
+                    aria-label="Choix du chef"
                   />
                 )}
                 {item.isVegetarian && (
                   <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#7C9D5A] text-white text-[9px] font-mono font-bold tracking-wider uppercase">
-                    <Leaf size={8} strokeWidth={2.8} /> Veg
+                    <Leaf size={8} strokeWidth={2.8} /> Vég
                   </span>
                 )}
               </div>
@@ -599,17 +832,6 @@ export default function Menu() {
 
         <div className="relative max-w-5xl mx-auto">
           <div className="text-center relative">
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ duration: 1.1, delay: 0.5, ease: EASE_OUT_EXPO }}
-              className="flex items-center justify-center gap-3 mb-3 origin-center"
-            >
-              <span className="h-px w-12 bg-blush/40" />
-              <span className="w-1.5 h-1.5 rotate-45 border border-amber" aria-hidden="true" />
-              <span className="h-px w-12 bg-blush/40" />
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
               animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
@@ -626,25 +848,14 @@ export default function Menu() {
             >
               du Soir
             </motion.h2>
-
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ duration: 1.1, delay: 1.2, ease: EASE_OUT_EXPO }}
-              className="flex items-center justify-center gap-3 mt-6 origin-center"
-            >
-              <span className="h-px w-20 bg-blush/40" />
-              <span className="w-1.5 h-1.5 rotate-45 border border-amber" aria-hidden="true" />
-              <span className="h-px w-20 bg-blush/40" />
-            </motion.div>
           </div>
 
           <motion.nav
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.8, duration: 0.9, ease: EASE_OUT_EXPO }}
-            className="mt-16 md:mt-24 max-w-3xl mx-auto"
-            aria-label="Menu sections"
+            transition={{ delay: 1.6, duration: 0.9, ease: EASE_OUT_EXPO }}
+            className="mt-12 md:mt-16 max-w-3xl mx-auto"
+            aria-label="Sections du menu"
           >
             <div
               className="relative rounded-md px-6 py-8 md:px-10 md:py-10 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)]"
@@ -663,7 +874,7 @@ export default function Menu() {
               <div className="flex items-center justify-center gap-4 mb-7">
                 <span className="h-px w-14 bg-amber/60" />
                 <p className="font-mono text-[10px] font-bold tracking-[0.4em] uppercase text-amber">
-                  The Order
+                  Le Menu
                 </p>
                 <span className="h-px w-14 bg-amber/60" />
               </div>
@@ -685,11 +896,6 @@ export default function Menu() {
                       <span>{co.title}</span>
                       <span className="absolute -bottom-0.5 left-6 right-0 h-px bg-amber scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
                     </a>
-                    {i < activeCourses.length - 1 && (
-                      <span className="text-amber/60 select-none" aria-hidden="true">
-                        &diams;
-                      </span>
-                    )}
                   </li>
                 ))}
               </ul>
@@ -777,69 +983,8 @@ export default function Menu() {
         </div>
       </section>
 
-      {/* ====== CHEF'S CLOSING NOTE — cinematic finish ====== */}
-      <section
-        id="menu-close"
-        className="relative px-6 py-32 md:py-40 overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #0E0D0C 0%, #0A0A0A 100%)" }}
-      >
-        <div className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(200,149,108,0.12)_0%,transparent_70%)] blur-3xl" />
-
-        <div className="relative max-w-3xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.7 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.9, type: "spring", stiffness: 110, damping: 18 }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-amber/60 mb-8"
-          >
-            <span className="font-display italic text-2xl text-amber">L</span>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1.1, ease: EASE_OUT_EXPO }}
-            className="font-accent italic text-2xl md:text-4xl text-blush leading-snug"
-          >
-            &ldquo;A menu is a letter. Read it slowly, and reply with an empty plate.&rdquo;
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.9 }}
-            className="font-mono text-[10px] font-bold tracking-[0.3em] uppercase text-amber mt-8"
-          >
-            &mdash; Krishna Chaithanya, Head Chef
-          </motion.p>
-
-          <div className="flex items-center justify-center gap-4 mt-16 mb-10">
-            <span className="h-px w-16 bg-blush/30" />
-            <span className="w-2 h-2 rotate-45 border border-amber" aria-hidden="true" />
-            <span className="h-px w-16 bg-blush/30" />
-          </div>
-
-          <p className="font-body text-base text-parchment max-w-md mx-auto mb-8">
-            Tonight&apos;s offering is best enjoyed at our table, with the call to prayer drifting up from the medina.
-          </p>
-
-          <motion.div
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 400, damping: 22 }}
-            className="inline-block"
-          >
-            <Link
-              to="/reservation"
-              className="magnetic-btn inline-flex items-center px-10 py-4 bg-amber text-void text-xs font-medium tracking-[0.25em] uppercase rounded-full hover:bg-soft-gold transition-colors duration-500"
-            >
-              Reserve a Table
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+      {/* ====== CHEF'S CLOSING NOTE — handwritten letter ====== */}
+      <ChefLetterClose />
     </div>
   );
 }

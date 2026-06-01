@@ -6,12 +6,12 @@ import { preloadCoreRoutes, preloadRoute } from "@/lib/route-preload";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 
 const navLinks = [
-  { name: "HOME", path: "/" },
-  { name: "MENU", path: "/menu" },
-  { name: "RESERVATION", path: "/reservation" },
-  { name: "EVENTS", path: "/events" },
-  { name: "GALLERY", path: "/gallery" },
-  { name: "ABOUT", path: "/about" },
+  { name: "ACCUEIL", path: "/" },
+  { name: "CARTE", path: "/menu" },
+  { name: "RÉSERVATION", path: "/reservation" },
+  { name: "ÉVÉNEMENTS", path: "/events" },
+  { name: "GALERIE", path: "/gallery" },
+  { name: "À PROPOS", path: "/about" },
   { name: "CONTACT", path: "/contact" },
 ];
 
@@ -50,15 +50,15 @@ export default function Navigation() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,height,backdrop-filter] duration-300 ${
-          scrolled ? "glass-nav h-16" : "bg-transparent h-20"
+        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,height,backdrop-filter] duration-300 max-md:bg-[rgba(10,10,10,0.85)] max-md:backdrop-blur-md max-md:border-b max-md:border-white/[0.06] ${
+          scrolled ? "h-16 md:glass-nav" : "h-20 md:bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
           {/* Brand */}
           <Link
             to="/"
-            className="font-body text-sm font-medium tracking-[0.12em] text-blush hover:text-amber transition-colors duration-300 relative group"
+            className="font-body text-sm font-semibold tracking-[0.14em] text-blush hover:text-amber transition-colors duration-300 relative group"
           >
             <span className="relative">
               LA BREVA
@@ -76,7 +76,7 @@ export default function Navigation() {
                   to={link.path}
                   onFocus={() => preloadRoute(link.path)}
                   onPointerEnter={() => preloadRoute(link.path)}
-                  className={`relative font-body text-xs tracking-[0.08em] py-1 transition-colors duration-300 ${
+                  className={`relative font-body text-xs font-semibold tracking-[0.1em] py-1 transition-colors duration-300 ${
                     active ? "text-amber" : "text-parchment hover:text-blush"
                   }`}
                 >
@@ -105,9 +105,9 @@ export default function Navigation() {
                 to="/reservation"
                 onFocus={() => preloadRoute("/reservation")}
                 onPointerEnter={() => preloadRoute("/reservation")}
-                className="magnetic-btn inline-flex items-center px-6 py-2.5 bg-amber text-void text-xs font-medium tracking-wide rounded-full hover:bg-soft-gold transition-colors duration-300"
+                className="magnetic-btn inline-flex items-center px-6 py-2.5 bg-amber text-void text-[12px] md:text-[13px] font-semibold tracking-[0.1em] rounded-full hover:bg-soft-gold transition-colors duration-300 shadow-[0_8px_22px_-12px_rgba(200,149,108,0.5)]"
               >
-                Reserve a Table
+                Réserver une Table
               </Link>
             </motion.div>
             <button
@@ -140,7 +140,7 @@ export default function Navigation() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-void/95 backdrop-blur-md flex flex-col items-center justify-center gap-8 overflow-hidden"
+            className="fixed inset-0 z-40 bg-[rgba(10,10,10,0.88)] backdrop-blur-xl flex flex-col items-center justify-center gap-8 overflow-hidden border-t border-white/[0.06]"
           >
             {/* Ambient orb */}
             <div className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[420px] h-[420px] rounded-full bg-[radial-gradient(circle,rgba(200,149,108,0.15)_0%,transparent_70%)] blur-2xl animate-drift-slow" />

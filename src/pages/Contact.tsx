@@ -9,24 +9,24 @@ import Reveal from "@/components/Reveal";
 import { fadeUp, staggerContainer, viewportOnce, EASE_OUT_EXPO } from "@/lib/motion";
 
 const contactSchema = z.object({
-  name: z.string().min(2, "Name is required"),
-  email: z.string().email("Valid email required"),
+  name: z.string().min(2, "Le nom est obligatoire"),
+  email: z.string().email("E-mail valide requis"),
   phone: z.string().optional(),
   subject: z.string().optional(),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  message: z.string().min(10, "Le message doit comporter au moins 10 caractères"),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
 const faqItems = [
-  { q: "Do you accept walk-ins?", a: "We do accept walk-ins, but we highly recommend making a reservation, especially for dinner and weekend visits." },
-  { q: "Is there a dress code?", a: "Smart casual is our dress code. We want you to feel comfortable while maintaining the elegant atmosphere." },
-  { q: "Do you accommodate dietary restrictions?", a: "Absolutely. We offer vegetarian, vegan, and gluten-free options. Please inform us of any allergies when making your reservation." },
-  { q: "Can I host a private event?", a: "Yes, our private dining room accommodates up to 30 guests. For larger events, the full terrace can be reserved." },
-  { q: "Do you have parking?", a: "We offer valet parking for dinner guests. There is also a public parking area 200 meters from the restaurant." },
-  { q: "Is the terrace open year-round?", a: "Our terrace is open from March through November. During winter months, we offer heated outdoor seating." },
-  { q: "Can I purchase a gift card?", a: "Yes, gift cards are available in denominations of 500, 1,000, and 2,000 MAD." },
-  { q: "Do you offer takeout or delivery?", a: "We offer a curated takeout menu. Delivery is available through select premium delivery partners in the Fes area." },
+  { q: "Acceptez-vous les visites sans réservation ?", a: "Nous acceptons les visites sans réservation, mais nous recommandons vivement de réserver, surtout pour le dîner et les visites en week-end." },
+  { q: "Y a-t-il un code vestimentaire ?", a: "Notre code vestimentaire est smart casual. Nous voulons que vous vous sentiez à l'aise tout en préservant l'atmosphère élégante." },
+  { q: "Acceptez-vous les restrictions alimentaires ?", a: "Absolument. Nous proposons des options végétariennes, véganes et sans gluten. Merci de nous informer de toute allergie lors de votre réservation." },
+  { q: "Puis-je organiser un événement privé ?", a: "Oui, notre salle privée peut accueillir jusqu'à 30 invités. Pour les événements plus importants, la terrasse entière peut être réservée." },
+  { q: "Avez-vous un parking ?", a: "Nous proposons un service voiturier pour les clients du dîner. Il existe également un parking public à 200 mètres du restaurant." },
+  { q: "La terrasse est-elle ouverte toute l'année ?", a: "Notre terrasse est ouverte de mars à novembre. Pendant les mois d'hiver, nous proposons des places extérieures chauffées." },
+  { q: "Puis-je acheter une carte cadeau ?", a: "Oui, des cartes cadeaux sont disponibles en coupures de 500, 1 000 et 2 000 MAD." },
+  { q: "Proposez-vous la vente à emporter ou la livraison ?", a: "Nous proposons un menu à emporter sélectionné. La livraison est disponible via certains partenaires premium dans la région de Fès." },
 ];
 
 export default function Contact() {
@@ -55,11 +55,13 @@ export default function Contact() {
       <section className="relative pt-44 pb-24 md:pt-52 md:pb-32 text-center px-6 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url("/picts/events/contact.jpg")` }}
+          style={{
+            backgroundImage: `url("/picts/events/contact.jpg")`,
+          }}
           aria-hidden="true"
         />
         <div
-          className="absolute inset-0 bg-gradient-to-b from-[#0E0D0C]/85 via-[#0E0D0C]/35 to-transparent"
+          className="absolute inset-0 bg-gradient-to-b from-[#0E0D0C]/70 via-[#0E0D0C]/35 to-[#0E0D0C]/55"
           aria-hidden="true"
         />
         {/* Amber spotlight */}
@@ -71,38 +73,32 @@ export default function Contact() {
         <span aria-hidden="true" className="hidden md:block pointer-events-none absolute bottom-10 right-10 w-12 h-12 border-r border-b border-amber/40" />
 
         <div className="relative max-w-4xl mx-auto">
-          <motion.p
-            initial={{ opacity: 0, letterSpacing: "0.1em" }}
-            animate={{ opacity: 1, letterSpacing: "0.42em" }}
-            transition={{ duration: 1.2, ease: EASE_OUT_EXPO }}
-            className="font-mono text-[12px] md:text-[13px] uppercase text-amber mb-6"
-          >
-            Get in Touch
-          </motion.p>
           <motion.h1
             initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
             transition={{ duration: 1.5, ease: EASE_OUT_EXPO, delay: 0.3 }}
-            className="font-display italic text-[clamp(2.5rem,10vw,8.5rem)] leading-[0.9] tracking-tight text-blush"
+            className="font-display italic text-[clamp(3rem,12vw,10.5rem)] leading-[0.9] tracking-tight"
+            style={{
+              color: "#FFFFFF",
+              textShadow:
+                "0 2px 6px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.55), 0 0 1px rgba(255,255,255,1), 0 0 5px rgba(255,236,200,0.65), 0 0 12px rgba(255,210,140,0.35)",
+            }}
           >
-            Contact
+            Contactez
           </motion.h1>
           <motion.h2
             initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
             transition={{ duration: 1.5, ease: EASE_OUT_EXPO, delay: 0.6 }}
-            className="font-display italic text-[clamp(1.75rem,7vw,6.5rem)] leading-[0.9] tracking-tight -mt-1 md:-mt-3 text-gold-shimmer"
+            className="font-display italic text-[clamp(2.25rem,8.5vw,8rem)] leading-[0.9] tracking-tight -mt-1 md:-mt-3"
+            style={{
+              color: "#D4A574",
+              textShadow:
+                "0 0 1px rgba(255,247,220,0.95), 0 0 5px rgba(255,232,180,0.8), 0 0 10px rgba(255,210,140,0.55), 0 0 15px rgba(200,149,108,0.4)",
+            }}
           >
-            Us
+            -nous
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.95, duration: 0.9 }}
-            className="font-accent italic text-lg md:text-xl text-parchment/85 mt-8 max-w-xl mx-auto leading-relaxed"
-          >
-            A note, a question, a celebration — we&apos;d be honoured to hear from you.
-          </motion.p>
         </div>
       </section>
 
@@ -116,10 +112,10 @@ export default function Contact() {
           className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-10"
         >
           {[
-            { icon: MapPin, label: "Address", detail: "12 Rue Sidi El Khiya, Fes el Bali", cta: "Get Directions", href: "https://maps.google.com/?q=La+Breva+Fes" },
-            { icon: Phone, label: "Phone", detail: "+212 535 123 456", cta: "Call", href: "tel:+212535123456" },
-            { icon: Mail, label: "Email", detail: "bonjour@labreva.ma", cta: "Write", href: "mailto:bonjour@labreva.ma" },
-            { icon: Clock, label: "Hours", detail: "Daily · 8AM – 12AM", cta: "Reserve", href: "/reservation" },
+            { icon: MapPin, label: "Adresse", detail: "La Breva Rooftop · Fès, Maroc", cta: "Itinéraire", href: "https://maps.app.goo.gl/2n3io47fHbzv6d7Q6" },
+            { icon: Phone, label: "Téléphone", detail: "+212 535 123 456", cta: "Appeler", href: "tel:+212535123456" },
+            { icon: Mail, label: "E-mail", detail: "bonjour@labreva.ma", cta: "Écrire", href: "mailto:bonjour@labreva.ma" },
+            { icon: Clock, label: "Horaires", detail: "Tous les jours · 8h – 00h", cta: "Réserver", href: "/reservation" },
           ].map((item, i) => (
             <motion.a
               key={i}
@@ -152,17 +148,17 @@ export default function Contact() {
             <Reveal>
               <div className="flex items-center gap-3 mb-5">
                 <span className="h-px w-10 bg-amber/50" />
-                <p className="font-mono text-[12px] tracking-[0.4em] uppercase text-amber">Write to Us</p>
+                <p className="font-mono text-[12px] tracking-[0.4em] uppercase text-amber">Écrivez-nous</p>
               </div>
             </Reveal>
             <Reveal delay={0.15}>
               <h2 className="font-display italic text-4xl md:text-6xl text-blush leading-[1.02] tracking-tight">
-                Send a <span className="text-gold-shimmer not-italic font-display italic">message</span>
+                Envoyer un <span className="text-gold-shimmer not-italic font-display italic">message</span>
               </h2>
             </Reveal>
             <Reveal delay={0.3}>
               <p className="font-accent italic text-base md:text-lg text-parchment/75 mt-5 max-w-md leading-relaxed">
-                Tell us about your visit, your event, or whatever&apos;s on your mind — we read every note.
+                Parlez-nous de votre visite, de votre événement ou de ce qui vous tient à cœur — nous lisons chaque message.
               </p>
             </Reveal>
 
@@ -192,9 +188,9 @@ export default function Contact() {
                         />
                       </svg>
                     </motion.div>
-                    <h3 className="font-display italic text-3xl text-blush mb-2">Message sent.</h3>
+                    <h3 className="font-display italic text-3xl text-blush mb-2">Message envoyé.</h3>
                     <p className="font-accent italic text-base text-parchment/75">
-                      We&apos;ll write back shortly &mdash; merci.
+                      Nous vous répondrons sous peu &mdash; merci.
                     </p>
                   </motion.div>
                 ) : (
@@ -210,12 +206,12 @@ export default function Contact() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
                       <motion.div variants={fadeUp}>
                         <label className="font-mono text-[12px] tracking-[0.3em] uppercase text-amber/80 block mb-2">
-                          — Your Name —
+                          — Votre Nom —
                         </label>
                         <input
                           {...register("name")}
                           type="text"
-                          placeholder="e.g. Sophie Laurent"
+                          placeholder="ex. Sophie Laurent"
                           className="w-full bg-transparent border-b border-blush/20 text-blush py-3 focus:border-amber focus:outline-none transition-colors placeholder:text-parchment/35"
                         />
                         {errors.name && (
@@ -226,12 +222,12 @@ export default function Contact() {
                       </motion.div>
                       <motion.div variants={fadeUp}>
                         <label className="font-mono text-[12px] tracking-[0.3em] uppercase text-amber/80 block mb-2">
-                          — Email —
+                          — E-mail —
                         </label>
                         <input
                           {...register("email")}
                           type="email"
-                          placeholder="you@example.com"
+                          placeholder="vous@exemple.com"
                           className="w-full bg-transparent border-b border-blush/20 text-blush py-3 focus:border-amber focus:outline-none transition-colors placeholder:text-parchment/35"
                         />
                         {errors.email && (
@@ -246,7 +242,7 @@ export default function Contact() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
                       <motion.div variants={fadeUp}>
                         <label className="font-mono text-[12px] tracking-[0.3em] uppercase text-amber/80 block mb-2">
-                          — Phone (optional) —
+                          — Téléphone (facultatif) —
                         </label>
                         <input
                           {...register("phone")}
@@ -257,20 +253,20 @@ export default function Contact() {
                       </motion.div>
                       <motion.div variants={fadeUp}>
                         <label className="font-mono text-[12px] tracking-[0.3em] uppercase text-amber/80 block mb-2">
-                          — Subject —
+                          — Sujet —
                         </label>
                         <select
                           {...register("subject")}
                           className="w-full bg-transparent border-b border-blush/20 text-blush py-3 focus:border-amber focus:outline-none transition-colors appearance-none"
                           style={{ backgroundImage: "none" }}
                         >
-                          <option value="" className="bg-obsidian">Select a subject</option>
-                          <option value="general" className="bg-obsidian">General Inquiry</option>
-                          <option value="reservation" className="bg-obsidian">Reservation Question</option>
-                          <option value="private" className="bg-obsidian">Private Event</option>
-                          <option value="feedback" className="bg-obsidian">Feedback</option>
-                          <option value="press" className="bg-obsidian">Press &amp; Media</option>
-                          <option value="other" className="bg-obsidian">Other</option>
+                          <option value="" className="bg-obsidian">Sélectionner un sujet</option>
+                          <option value="general" className="bg-obsidian">Demande Générale</option>
+                          <option value="reservation" className="bg-obsidian">Question de Réservation</option>
+                          <option value="private" className="bg-obsidian">Événement Privé</option>
+                          <option value="feedback" className="bg-obsidian">Commentaires</option>
+                          <option value="press" className="bg-obsidian">Presse &amp; Médias</option>
+                          <option value="other" className="bg-obsidian">Autre</option>
                         </select>
                       </motion.div>
                     </div>
@@ -278,12 +274,12 @@ export default function Contact() {
                     {/* Message */}
                     <motion.div variants={fadeUp}>
                       <label className="font-mono text-[12px] tracking-[0.3em] uppercase text-amber/80 block mb-2">
-                        — Your Message —
+                        — Votre Message —
                       </label>
                       <textarea
                         {...register("message")}
                         rows={5}
-                        placeholder="Write to us…"
+                        placeholder="Écrivez-nous…"
                         className="w-full bg-transparent border-b border-blush/20 text-blush py-3 focus:border-amber focus:outline-none transition-colors resize-none placeholder:text-parchment/35"
                       />
                       {errors.message && (
@@ -303,7 +299,7 @@ export default function Contact() {
                         disabled={createContact.isPending}
                         className="magnetic-btn inline-flex items-center gap-3 px-10 py-4 bg-amber text-void font-medium text-sm tracking-[0.25em] uppercase rounded-full hover:bg-soft-gold transition-colors disabled:opacity-50"
                       >
-                        {createContact.isPending ? "Sending…" : "Send Message"}
+                        {createContact.isPending ? "Envoi…" : "Envoyer le Message"}
                         <span aria-hidden="true">&rarr;</span>
                       </motion.button>
                       {submitError && (
@@ -330,17 +326,17 @@ export default function Contact() {
                 {/* Header strip */}
                 <div className="px-8 py-7 border-b border-amber/15">
                   <h3 className="font-display italic text-3xl text-blush leading-tight">
-                    Find <span className="text-gold-shimmer not-italic font-display italic">us</span>
+                    Nous <span className="text-gold-shimmer not-italic font-display italic">trouver</span>
                   </h3>
                 </div>
 
                 {/* Info rows */}
                 <ul className="divide-y divide-charcoal/60">
                   {[
-                    { icon: MapPin, label: "Address", lines: ["12 Rue Sidi El Khiya", "Fes el Bali — Morocco"] },
-                    { icon: Phone, label: "Telephone", lines: ["+212 535 123 456"] },
-                    { icon: Mail, label: "Email", lines: ["bonjour@labreva.ma"] },
-                    { icon: Clock, label: "Open Hours", lines: ["Daily · 8 AM — 12 AM"] },
+                    { icon: MapPin, label: "Adresse", lines: ["La Breva Rooftop", "Fès — Maroc"] },
+                    { icon: Phone, label: "Téléphone", lines: ["+212 535 123 456"] },
+                    { icon: Mail, label: "E-mail", lines: ["bonjour@labreva.ma"] },
+                    { icon: Clock, label: "Horaires d'Ouverture", lines: ["Tous les jours · 8h — 00h"] },
                   ].map((row, i) => (
                     <motion.li
                       key={i}
@@ -369,7 +365,7 @@ export default function Contact() {
 
                 {/* Footer with social */}
                 <div className="px-8 py-6 border-t border-amber/15 flex items-center justify-between">
-                  <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-parchment/55">Follow the Journey</p>
+                  <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-parchment/55">Suivez le Voyage</p>
                   <div className="flex items-center gap-4">
                     {[
                       { icon: Instagram, href: "https://www.instagram.com/labrevafes/", label: "Instagram" },
@@ -414,12 +410,12 @@ export default function Contact() {
                     <MessageCircle size={16} className="text-[#25D366]" />
                   </motion.span>
                   <div>
-                    <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-[#25D366]/80 mb-1">Prefer to chat?</p>
-                    <p className="font-body text-base text-blush leading-tight">Message us on WhatsApp</p>
+                    <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-[#25D366]/80 mb-1">Préférez discuter ?</p>
+                    <p className="font-body text-base text-blush leading-tight">Écrivez-nous sur WhatsApp</p>
                   </div>
                 </div>
                 <span className="font-mono text-[13px] tracking-[0.2em] uppercase text-blush group-hover:text-[#25D366] transition-colors">
-                  Open &rsaquo;
+                  Ouvrir &rsaquo;
                 </span>
               </motion.a>
             </Reveal>
@@ -433,38 +429,39 @@ export default function Contact() {
           <div className="max-w-7xl mx-auto px-6 pt-16 md:pt-20 pb-6">
             <div className="flex items-center gap-3 mb-5">
               <span className="h-px w-10 bg-amber/50" />
-              <p className="font-mono text-[12px] tracking-[0.4em] uppercase text-amber">Visit Us</p>
+              <p className="font-mono text-[12px] tracking-[0.4em] uppercase text-amber">Nous Rendre Visite</p>
             </div>
             <h2 className="font-display italic text-4xl md:text-6xl text-blush leading-[1.02] tracking-tight">
-              At the heart of the <span className="text-gold-shimmer not-italic font-display italic">medina</span>
+              Au cœur de <span className="text-gold-shimmer not-italic font-display italic">Fès</span>
             </h2>
-            <p className="font-accent italic text-base md:text-lg text-parchment/75 mt-4 max-w-xl">
-              Tucked into the narrow lanes of Fes el Bali — the closest taxis can drop you at Bab Boujloud, two minutes away on foot.
+            <p className="font-accent italic text-xl md:text-2xl lg:text-3xl text-parchment/85 mt-6 max-w-3xl leading-[1.45]">
+              Une terrasse perchée sur la ville — accès aisé en taxi, stationnement devant l&apos;entrée, et la médina à quelques minutes seulement.
             </p>
           </div>
         </Reveal>
 
         <div className="relative h-[420px] md:h-[520px] overflow-hidden border-y border-charcoal/60">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.715220363392!2d-4.9781!3d34.0618!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDAzJzQyLjUiTiA0wrA1OCc0MS4yIlc!5e0!3m2!1sen!2sma!4v1"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3306!2d-5.0046427!3d34.0353536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd9f8b3b8f6b73b3%3A0x3fdc9a8320cc8534!2sLa%20Breva%20Rooftop!5e0!3m2!1sfr!2sma!4v1720000000000"
             className="absolute inset-0 w-full h-full"
             style={{ filter: "grayscale(0.6) contrast(0.95) brightness(0.85)" }}
             loading="lazy"
-            title="La Breva Location"
+            title="Emplacement de La Breva Rooftop"
+            referrerPolicy="no-referrer-when-downgrade"
           />
           {/* Floating address card on the map */}
           <Reveal delay={0.2}>
-            <div className="absolute top-6 left-6 md:top-10 md:left-10 max-w-xs rounded-sm bg-[#0E0D0C]/90 backdrop-blur-md border border-amber/30 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] p-6">
-              <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-amber mb-2">La Breva</p>
-              <p className="font-display italic text-2xl text-blush leading-tight mb-3">12 Rue Sidi El Khiya</p>
-              <p className="font-body text-base text-parchment/80 mb-4">Fes el Bali · Morocco</p>
+            <div className="absolute top-6 right-6 md:top-10 md:right-10 max-w-xs rounded-sm bg-[#0E0D0C]/90 backdrop-blur-md border border-amber/30 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] p-6">
+              <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-amber mb-2">La Breva Rooftop</p>
+              <p className="font-display italic text-2xl text-blush leading-tight mb-3">Fès</p>
+              <p className="font-body text-base text-parchment/80 mb-4">34°02&apos;07&Prime;N · 5°00&apos;17&Prime;W</p>
               <a
-                href="https://maps.google.com/?q=La+Breva+Fes"
+                href="https://maps.app.goo.gl/2n3io47fHbzv6d7Q6"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center font-mono text-[13px] tracking-[0.25em] uppercase text-amber hover:text-soft-gold transition-colors group/dir"
               >
-                Open in Maps
+                Ouvrir dans Maps
                 <span className="ml-2 transition-transform duration-300 group-hover/dir:translate-x-1">&rsaquo;</span>
               </a>
             </div>
@@ -481,11 +478,11 @@ export default function Contact() {
             <div className="text-center mb-16 md:mb-20">
               <div className="flex items-center justify-center gap-3 mb-5">
                 <span className="h-px w-12 bg-amber/50" />
-                <p className="font-mono text-[12px] tracking-[0.45em] uppercase text-amber">Visiting Hours</p>
+                <p className="font-mono text-[12px] tracking-[0.45em] uppercase text-amber">Heures de Visite</p>
                 <span className="h-px w-12 bg-amber/50" />
               </div>
               <h2 className="font-display italic text-5xl md:text-7xl text-blush leading-[1.02] tracking-tight">
-                When we&apos;re <span className="text-gold-shimmer not-italic font-display italic">open</span>
+                Quand nous sommes <span className="text-gold-shimmer not-italic font-display italic">ouverts</span>
               </h2>
             </div>
           </Reveal>
@@ -494,11 +491,11 @@ export default function Contact() {
             {/* Schedule */}
             <Reveal variant="right" delay={0.1}>
               <div className="rounded-sm bg-gradient-to-br from-warm-stone/40 to-obsidian/60 border border-charcoal/80 backdrop-blur-[6px] p-8 md:p-10">
-                <p className="font-mono text-[12px] tracking-[0.4em] uppercase text-amber mb-6">— Schedule —</p>
+                <p className="font-mono text-[12px] tracking-[0.4em] uppercase text-amber mb-6">— Horaires —</p>
                 {[
-                  { days: "Monday — Friday", hours: "8 AM – 12 AM" },
-                  { days: "Saturday", hours: "9 AM – 1 AM" },
-                  { days: "Sunday", hours: "9 AM – 11 PM" },
+                  { days: "Lun — Ven", hours: "8h – 00h" },
+                  { days: "Sam", hours: "9h – 1h" },
+                  { days: "Dim", hours: "9h – 23h" },
                 ].map((s, i) => (
                   <motion.div
                     key={i}
@@ -513,7 +510,7 @@ export default function Contact() {
                   </motion.div>
                 ))}
                 <p className="font-mono text-[12px] tracking-[0.25em] uppercase text-parchment/45 mt-6">
-                  &mdash; Holiday hours may vary
+                  &mdash; Les horaires des jours fériés peuvent varier
                 </p>
               </div>
             </Reveal>
@@ -521,12 +518,12 @@ export default function Contact() {
             {/* Best times to visit */}
             <Reveal variant="left" delay={0.2}>
               <div className="rounded-sm bg-gradient-to-br from-warm-stone/40 to-obsidian/60 border border-charcoal/80 backdrop-blur-[6px] p-8 md:p-10">
-                <p className="font-mono text-[12px] tracking-[0.4em] uppercase text-amber mb-6">— Best Times to Visit —</p>
+                <p className="font-mono text-[12px] tracking-[0.4em] uppercase text-amber mb-6">— Meilleurs Moments pour Venir —</p>
                 {[
-                  { roman: "i.", time: "Lunch", window: "12:00 — 14:30", note: "Quieter — perfect for business" },
-                  { roman: "ii.", time: "Sunset", window: "18:00 — 20:00", note: "The terrace is magical" },
-                  { roman: "iii.", time: "Dinner", window: "20:00 — 22:30", note: "The full experience" },
-                  { roman: "iv.", time: "Late Night", window: "22:30 — 00:00", note: "Cocktails & atmosphere" },
+                  { roman: "i.", time: "Déjeuner", window: "12:00 — 14:30", note: "Plus calme — parfait pour le travail" },
+                  { roman: "ii.", time: "Coucher du soleil", window: "18:00 — 20:00", note: "La terrasse est magique" },
+                  { roman: "iii.", time: "Dîner", window: "20:00 — 22:30", note: "L'expérience complète" },
+                  { roman: "iv.", time: "Fin de soirée", window: "22:30 — 00:00", note: "Cocktails & atmosphère" },
                 ].map((slot, i) => (
                   <motion.div
                     key={i}
@@ -565,7 +562,7 @@ export default function Contact() {
                 <span className="h-px w-10 bg-amber/50" />
               </div>
               <h2 className="font-display italic text-5xl md:text-7xl text-blush leading-[1.02] tracking-tight">
-                Common <span className="text-gold-shimmer not-italic font-display italic">questions</span>
+                Questions <span className="text-gold-shimmer not-italic font-display italic">fréquentes</span>
               </h2>
             </div>
           </Reveal>
@@ -632,10 +629,10 @@ export default function Contact() {
             <span className="h-px w-16 bg-amber/35" />
           </div>
           <p className="font-accent italic text-2xl md:text-3xl text-blush max-w-2xl mx-auto leading-relaxed">
-            &ldquo;A table is always set for you at La Breva.&rdquo;
+            &ldquo;Une table est toujours dressée pour vous à La Breva.&rdquo;
           </p>
           <p className="font-mono text-[12px] tracking-[0.3em] uppercase text-amber mt-6">
-            &mdash; Until soon, Fes
+            &mdash; À très bientôt, Fès
           </p>
         </Reveal>
       </section>

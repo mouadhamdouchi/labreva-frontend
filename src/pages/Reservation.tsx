@@ -8,16 +8,16 @@ import { trpc } from "@/providers/trpc";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 
 const step1Schema = z.object({
-  date: z.string().min(1, "Select a date"),
-  time: z.string().min(1, "Select a time"),
+  date: z.string().min(1, "Choisir une date"),
+  time: z.string().min(1, "Choisir une heure"),
   guests: z.number().min(1).max(20),
   seating: z.enum(["indoor", "terrace"]).optional(),
 });
 
 const step2Schema = z.object({
-  guestName: z.string().min(2, "Name is required"),
-  guestEmail: z.string().email("Valid email required"),
-  guestPhone: z.string().min(8, "Valid phone required"),
+  guestName: z.string().min(2, "Le nom est obligatoire"),
+  guestEmail: z.string().email("E-mail valide requis"),
+  guestPhone: z.string().min(8, "Numéro de téléphone valide requis"),
   occasion: z.string().optional(),
   requests: z.string().max(500).optional(),
 });
@@ -49,38 +49,31 @@ function ReservationHeader() {
       </motion.div>
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(200,149,108,0.15)_0%,transparent_70%)] blur-3xl animate-drift-slow" />
       <motion.div style={{ y: titleY, opacity }} className="relative z-10">
-        <motion.p
-          initial={{ opacity: 0, letterSpacing: "0.1em" }}
-          animate={{ opacity: 1, letterSpacing: "0.42em" }}
-          transition={{ duration: 1.2, ease: EASE_OUT_EXPO }}
-          className="font-mono text-[10px] md:text-[11px] uppercase text-amber mb-6"
-        >
-          Reserve
-        </motion.p>
         <motion.h1
           initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
           animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
           transition={{ duration: 1.5, ease: EASE_OUT_EXPO, delay: 0.3 }}
           className="font-display italic text-[clamp(3.5rem,11vw,11rem)] leading-[0.9] tracking-tight text-blush"
+          style={{
+            textShadow:
+              "0 0 24px rgba(245,230,211,0.35), 0 4px 14px rgba(0,0,0,0.5)",
+          }}
         >
-          Book Your
+          Réservez Votre
         </motion.h1>
         <motion.h2
           initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
           animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
           transition={{ duration: 1.5, ease: EASE_OUT_EXPO, delay: 0.6 }}
-          className="font-display italic text-[clamp(2.5rem,8vw,7.5rem)] leading-[0.9] tracking-tight -mt-2 md:-mt-3 text-gold-shimmer"
+          className="font-display italic text-[clamp(2.5rem,8vw,7.5rem)] leading-[0.9] tracking-tight -mt-2 md:-mt-3"
+          style={{
+            color: "#F7F4F0",
+            textShadow:
+              "0 0 22px rgba(247,244,240,0.5), 0 4px 14px rgba(0,0,0,0.5)",
+          }}
         >
           Table
         </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.95, duration: 0.9 }}
-          className="font-accent italic text-lg md:text-xl text-parchment/85 mt-8 max-w-xl mx-auto leading-relaxed"
-        >
-          Secure your place for an unforgettable evening
-        </motion.p>
       </motion.div>
     </section>
   );
@@ -151,7 +144,7 @@ export default function Reservation() {
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+    return new Date(dateStr).toLocaleDateString("fr-FR", { weekday: "long", month: "long", day: "numeric" });
   };
 
   return (
@@ -196,17 +189,17 @@ export default function Reservation() {
                   exit={{ opacity: 0, x: -30 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h2 className="font-display text-2xl text-blush mb-6">Date & Time</h2>
+                  <h2 className="font-display text-2xl text-blush mb-6">Date & Heure</h2>
 
                   <form onSubmit={step1Form.handleSubmit(onStep1Submit)} className="space-y-6">
                     {/* Date Selection */}
                     <div>
-                      <label className="section-label text-muted-taupe mb-3 block">SELECT A DATE</label>
+                      <label className="section-label text-muted-taupe mb-3 block">CHOISIR UNE DATE</label>
                       <div className="flex gap-2 overflow-x-auto pb-2">
                         {next7Days.map((date) => {
                           const dateStr = date.toISOString().split("T")[0];
                           const isSelected = formData.date === dateStr;
-                          const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
+                          const dayName = date.toLocaleDateString("fr-FR", { weekday: "short" });
                           const dayNum = date.getDate();
                           return (
                             <motion.button
@@ -238,7 +231,7 @@ export default function Reservation() {
 
                     {/* Time Selection */}
                     <div>
-                      <label className="section-label text-muted-taupe mb-3 block">SELECT A TIME</label>
+                      <label className="section-label text-muted-taupe mb-3 block">CHOISIR UNE HEURE</label>
                       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                         {timeSlots.map((time) => {
                           const slotData = availability?.find((s) => s.time === time);
@@ -273,7 +266,7 @@ export default function Reservation() {
 
                     {/* Guest Counter */}
                     <div>
-                      <label className="section-label text-muted-taupe mb-3 block">NUMBER OF GUESTS</label>
+                      <label className="section-label text-muted-taupe mb-3 block">NOMBRE DE CONVIVES</label>
                       <div className="flex items-center gap-4">
                         <button
                           type="button"
@@ -299,23 +292,26 @@ export default function Reservation() {
 
                     {/* Seating */}
                     <div>
-                      <label className="section-label text-muted-taupe mb-3 block">SEATING AREA</label>
+                      <label className="section-label text-muted-taupe mb-3 block">PRÉFÉRENCE DE PLACE</label>
                       <div className="grid grid-cols-2 gap-4">
-                        {["indoor", "terrace"].map((option) => (
+                        {[
+                          { value: "indoor", label: "Intérieur" },
+                          { value: "terrace", label: "Terrasse" },
+                        ].map((option) => (
                           <motion.button
-                            key={option}
+                            key={option.value}
                             type="button"
                             whileHover={{ y: -3 }}
                             whileTap={{ scale: 0.97 }}
                             transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                            onClick={() => step1Form.setValue("seating", option as "indoor" | "terrace")}
-                            className={`p-4 rounded-lg border transition-colors duration-300 capitalize ${
-                              step1Form.watch("seating") === option
+                            onClick={() => step1Form.setValue("seating", option.value as "indoor" | "terrace")}
+                            className={`p-4 rounded-lg border transition-colors duration-300 ${
+                              step1Form.watch("seating") === option.value
                                 ? "border-amber bg-amber/5 glow-subtle shadow-[0_0_25px_rgba(200,149,108,0.3)]"
                                 : "border-charcoal text-parchment hover:border-amber/50"
                             }`}
                           >
-                            {option}
+                            {option.label}
                           </motion.button>
                         ))}
                       </div>
@@ -328,7 +324,7 @@ export default function Reservation() {
                       transition={{ type: "spring", stiffness: 400, damping: 22 }}
                       className="magnetic-btn w-full py-4 bg-amber text-void font-medium rounded-full hover:bg-soft-gold transition-colors"
                     >
-                      Continue
+                      Continuer
                     </motion.button>
                   </form>
                 </motion.div>
@@ -350,14 +346,14 @@ export default function Reservation() {
                     >
                       <ChevronLeft size={20} />
                     </button>
-                    <h2 className="font-display text-2xl text-blush">Your Details</h2>
+                    <h2 className="font-display text-2xl text-blush">Vos Coordonnées</h2>
                   </div>
 
                   <form onSubmit={step2Form.handleSubmit(onStep2Submit)} className="space-y-5">
                     {[
-                      { name: "guestName" as const, label: "Full Name", type: "text", placeholder: "Your full name" },
-                      { name: "guestEmail" as const, label: "Email", type: "email", placeholder: "your@email.com" },
-                      { name: "guestPhone" as const, label: "Phone", type: "tel", placeholder: "+212 535 123 456" },
+                      { name: "guestName" as const, label: "Nom Complet", type: "text", placeholder: "Votre nom complet" },
+                      { name: "guestEmail" as const, label: "E-mail", type: "email", placeholder: "votre@email.com" },
+                      { name: "guestPhone" as const, label: "Téléphone", type: "tel", placeholder: "+212 535 123 456" },
                     ].map((field) => (
                       <div key={field.name}>
                         <label className="section-label text-muted-taupe mb-2 block">{field.label.toUpperCase()}</label>
@@ -374,26 +370,26 @@ export default function Reservation() {
                     ))}
 
                     <div>
-                      <label className="section-label text-muted-taupe mb-2 block">OCCASION (OPTIONAL)</label>
+                      <label className="section-label text-muted-taupe mb-2 block">OCCASION (FACULTATIF)</label>
                       <select
                         {...step2Form.register("occasion")}
                         className="w-full bg-transparent border-b border-charcoal text-blush py-3 px-0 focus:border-amber focus:outline-none transition-colors"
                       >
-                        <option value="" className="bg-void">Select an occasion</option>
-                        <option value="birthday" className="bg-void">Birthday</option>
-                        <option value="anniversary" className="bg-void">Anniversary</option>
-                        <option value="date-night" className="bg-void">Date Night</option>
-                        <option value="business" className="bg-void">Business Dinner</option>
-                        <option value="other" className="bg-void">Other</option>
+                        <option value="" className="bg-void">Choisir une occasion</option>
+                        <option value="birthday" className="bg-void">Anniversaire</option>
+                        <option value="anniversary" className="bg-void">Anniversaire de Mariage</option>
+                        <option value="date-night" className="bg-void">Soirée Romantique</option>
+                        <option value="business" className="bg-void">Dîner d&apos;Affaires</option>
+                        <option value="other" className="bg-void">Autre</option>
                       </select>
                     </div>
 
                     <div>
-                      <label className="section-label text-muted-taupe mb-2 block">SPECIAL REQUESTS</label>
+                      <label className="section-label text-muted-taupe mb-2 block">DEMANDES SPÉCIALES</label>
                       <textarea
                         {...step2Form.register("requests")}
                         rows={4}
-                        placeholder="Dietary requirements, special requests..."
+                        placeholder="Régime alimentaire, demandes spéciales..."
                         className="w-full bg-transparent border-b border-charcoal text-blush py-3 px-0 focus:border-amber focus:outline-none transition-colors resize-none placeholder:text-muted-taupe/50"
                       />
                     </div>
@@ -404,13 +400,13 @@ export default function Reservation() {
                         onClick={() => setStep(1)}
                         className="flex-1 py-4 border border-charcoal text-parchment rounded-full hover:border-amber transition-all"
                       >
-                        Back
+                        Retour
                       </button>
                       <button
                         type="submit"
                         className="flex-1 py-4 bg-amber text-void font-medium rounded-full hover:bg-soft-gold transition-all hover:scale-[1.02]"
                       >
-                        Review
+                        Vérifier
                       </button>
                     </div>
                   </form>
@@ -433,21 +429,21 @@ export default function Reservation() {
                     >
                       <ChevronLeft size={20} />
                     </button>
-                    <h2 className="font-display text-2xl text-blush">Confirm Reservation</h2>
+                    <h2 className="font-display text-2xl text-blush">Confirmer la Réservation</h2>
                   </div>
 
                   <div className="glass-card p-6 mb-6">
-                    <h3 className="font-display text-lg text-blush mb-4">Your Reservation</h3>
+                    <h3 className="font-display text-lg text-blush mb-4">Votre Réservation</h3>
                     <div className="border-t border-charcoal pt-4 grid grid-cols-2 gap-4">
                       {[
                         { label: "Date", value: formatDate(formData.date!) },
-                        { label: "Time", value: formData.time },
-                        { label: "Guests", value: `${formData.guests} people` },
-                        { label: "Seating", value: formData.seating || "Not specified" },
-                        { label: "Name", value: formData.guestName },
-                        { label: "Email", value: formData.guestEmail },
-                        { label: "Phone", value: formData.guestPhone },
-                        { label: "Occasion", value: formData.occasion || "—" },
+                        { label: "Heure", value: formData.time },
+                        { label: "Invités", value: formData.guests === 1 ? "Pour 1 personne" : `Pour ${formData.guests} personnes` },
+                        { label: "Place", value: formData.seating === "indoor" ? "Intérieur" : formData.seating === "terrace" ? "Terrasse" : "Non spécifié" },
+                        { label: "Nom", value: formData.guestName },
+                        { label: "E-mail", value: formData.guestEmail },
+                        { label: "Téléphone", value: formData.guestPhone },
+                        { label: "Occasion", value: formData.occasion ? ({ birthday: "Anniversaire", anniversary: "Anniversaire de Mariage", "date-night": "Soirée Romantique", business: "Dîner d'Affaires", other: "Autre" } as Record<string, string>)[formData.occasion] || formData.occasion : "—" },
                       ].map((item) => (
                         <div key={item.label}>
                           <p className="font-body text-xs text-muted-taupe">{item.label}</p>
@@ -465,7 +461,7 @@ export default function Reservation() {
                       className="mt-1 w-4 h-4 rounded border-charcoal bg-transparent text-amber focus:ring-amber"
                     />
                     <span className="font-body text-sm text-parchment">
-                      I agree to the cancellation policy. Cancellations must be made at least 24 hours in advance.
+                      J&apos;accepte la politique d&apos;annulation. Les annulations doivent être effectuées au moins 24 heures à l&apos;avance.
                     </span>
                   </label>
 
@@ -474,14 +470,14 @@ export default function Reservation() {
                       onClick={() => setStep(2)}
                       className="flex-1 py-4 border border-charcoal text-parchment rounded-full hover:border-amber transition-all"
                     >
-                      Edit Details
+                      Modifier les Coordonnées
                     </button>
                     <button
                       onClick={onConfirm}
                       disabled={!termsAccepted || createReservation.isPending}
                       className="flex-1 py-4 bg-amber text-void font-medium rounded-full hover:bg-soft-gold transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {createReservation.isPending ? "Confirming..." : "Confirm Reservation"}
+                      {createReservation.isPending ? "Confirmation en cours..." : "Confirmer la Réservation"}
                     </button>
                   </div>
                   {reservationError && (
@@ -545,7 +541,7 @@ export default function Reservation() {
                     transition={{ delay: 0.5, duration: 0.5 }}
                     className="font-display text-3xl text-success mb-3"
                   >
-                    Reservation Confirmed!
+                    Réservation Confirmée !
                   </motion.h2>
                   <motion.p
                     initial={{ opacity: 0 }}
@@ -553,7 +549,7 @@ export default function Reservation() {
                     transition={{ delay: 0.7, duration: 0.5 }}
                     className="font-body text-parchment mb-4"
                   >
-                    We&apos;ve sent a confirmation to {formData.guestEmail}
+                    Nous avons envoyé une confirmation à {formData.guestEmail}
                   </motion.p>
 
                   <motion.div
@@ -568,7 +564,7 @@ export default function Reservation() {
                       whileTap={{ scale: 0.9 }}
                       onClick={() => navigator.clipboard.writeText(bookingId)}
                       className="text-muted-taupe hover:text-amber transition-colors"
-                      aria-label="Copy booking ID"
+                      aria-label="Copier l'identifiant de réservation"
                     >
                       <Copy size={16} />
                     </motion.button>
@@ -580,7 +576,7 @@ export default function Reservation() {
                     transition={{ delay: 0.9 }}
                     className="font-body text-sm text-muted-taupe mb-8"
                   >
-                    You&apos;ll receive a reminder 24 hours before your visit.
+                    Vous recevrez un rappel 24 heures avant votre visite.
                   </motion.p>
 
                   <motion.div
@@ -590,8 +586,8 @@ export default function Reservation() {
                     className="grid grid-cols-2 gap-4"
                   >
                     {[
-                      { label: "Add to Calendar" },
-                      { label: "Modify Reservation" },
+                      { label: "Ajouter au Calendrier" },
+                      { label: "Modifier la Réservation" },
                     ].map((item) => (
                       <motion.div
                         key={item.label}
@@ -617,13 +613,13 @@ export default function Reservation() {
               <div className="w-2 h-2 rotate-45 border border-amber" />
               <div className="h-px w-10 bg-amber/30" />
             </div>
-            <h3 className="font-display text-lg text-blush mb-4">Reservation Policy</h3>
+            <h3 className="font-display text-lg text-blush mb-4">Politique de Réservation</h3>
             <div className="space-y-2 text-center">
               {[
-                "Reservations are held for 15 minutes past the reserved time.",
-                "For parties of 8 or more, a deposit may be required.",
-                "Cancellations must be made at least 24 hours in advance.",
-                "Dress code: Smart casual.",
+                "Les réservations sont maintenues 15 minutes après l'heure réservée.",
+                "Pour les groupes de 8 personnes ou plus, un acompte peut être demandé.",
+                "Les annulations doivent être effectuées au moins 24 heures à l'avance.",
+                "Tenue vestimentaire : tenue chic décontractée.",
               ].map((rule) => (
                 <p key={rule} className="font-body text-sm text-parchment flex items-center justify-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0" />

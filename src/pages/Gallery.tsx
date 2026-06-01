@@ -7,23 +7,31 @@ import { gridItem, staggerContainer, EASE_OUT_EXPO } from "@/lib/motion";
 
 const categories = ["all", "food", "drinks", "ambiance", "events"];
 
+const categoryLabels: Record<string, string> = {
+  all: "tout",
+  food: "cuisine",
+  drinks: "boissons",
+  ambiance: "ambiance",
+  events: "événements",
+};
+
 const DEFAULT_GALLERY = [
-  { id: 1, image: "/picts/rooftop/rooftop.jpg", category: "ambiance", title: "Terrace at Night" },
-  { id: 2, image: "/picts/menu/orange-juice.jpg", category: "drinks", title: "Fresh Juices" },
-  { id: 3, image: "/picts/inside/interior.jpg", category: "ambiance", title: "Interior Dining" },
-  { id: 4, image: "/picts/team/chef.jpg", category: "food", title: "Chef at Work" },
-  { id: 5, image: "/picts/inside/zellige.jpg", category: "ambiance", title: "Zellige Tilework" },
-  { id: 6, image: "/picts/menu/breakfast.jpg", category: "food", title: "Breakfast Spread" },
-  { id: 7, image: "/picts/events/cooking-class.jpg", category: "events", title: "Cooking Class" },
-  { id: 8, image: "/picts/inside/lanterns.jpg", category: "ambiance", title: "Brass Lantern" },
-  { id: 9, image: "/picts/menu/mint-tea.jpg", category: "drinks", title: "Tea Ceremony" },
-  { id: 10, image: "/picts/menu/sea-bass.jpg", category: "food", title: "Sea Bass" },
+  { id: 1, image: "/picts/rooftop/rooftop.jpg", category: "ambiance", title: "Terrasse de Nuit" },
+  { id: 2, image: "/picts/menu/orange-juice.jpg", category: "drinks", title: "Jus Frais" },
+  { id: 3, image: "/picts/inside/interior.jpg", category: "ambiance", title: "Salle Intérieure" },
+  { id: 4, image: "/picts/team/chef.jpg", category: "food", title: "Chef au Travail" },
+  { id: 5, image: "/picts/inside/zellige.jpg", category: "ambiance", title: "Zellige Marocain" },
+  { id: 6, image: "/picts/menu/breakfast.jpg", category: "food", title: "Petit Déjeuner" },
+  { id: 7, image: "/picts/events/cooking-class.jpg", category: "events", title: "Cours de Cuisine" },
+  { id: 8, image: "/picts/inside/lanterns.jpg", category: "ambiance", title: "Lanterne en Laiton" },
+  { id: 9, image: "/picts/menu/mint-tea.jpg", category: "drinks", title: "Cérémonie du Thé" },
+  { id: 10, image: "/picts/menu/sea-bass.jpg", category: "food", title: "Bar de Mer" },
   { id: 11, image: "/picts/menu/lamb-tagine.jpg", category: "food", title: "Rfissa" },
-  { id: 12, image: "/picts/menu/burrata-salad.jpg", category: "food", title: "Burrata Salad" },
-  { id: 13, image: "/picts/menu/grilled-octopus.jpg", category: "food", title: "Grilled Octopus" },
-  { id: 14, image: "/picts/menu/chocolate-fondant.jpg", category: "food", title: "Chocolate Fondant" },
-  { id: 15, image: "/picts/menu/salmon.jpg", category: "food", title: "Citrus Salmon" },
-  { id: 16, image: "/picts/menu/pastilla.jpg", category: "food", title: "Moroccan Pastilla" },
+  { id: 12, image: "/picts/menu/burrata-salad.jpg", category: "food", title: "Salade de Burrata" },
+  { id: 13, image: "/picts/menu/grilled-octopus.jpg", category: "food", title: "Poulpe Grillé" },
+  { id: 14, image: "/picts/menu/chocolate-fondant.jpg", category: "food", title: "Fondant au Chocolat" },
+  { id: 15, image: "/picts/menu/salmon.jpg", category: "food", title: "Saumon aux Agrumes" },
+  { id: 16, image: "/picts/menu/pastilla.jpg", category: "food", title: "Pastilla Marocaine" },
 ];
 
 export default function Gallery() {
@@ -108,53 +116,91 @@ export default function Gallery() {
           aria-hidden="true"
         />
 
-        {/* Title content — glassy frosted card */}
-        <div className="relative inline-flex flex-col items-center px-8 py-10 md:px-16 md:py-14 rounded-sm bg-[#F5E6D3]/25 backdrop-blur-[6px] border border-[#3C2415]/10 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.4)]">
+        {/* Top fade — darkens the strip behind the navbar for legibility */}
+        <div
+          className="absolute inset-x-0 top-0 h-40 md:h-48 bg-gradient-to-b from-black/65 via-black/30 to-transparent pointer-events-none"
+          aria-hidden="true"
+        />
+
+        {/* Title content — opaque parchment card */}
+        <div className="relative inline-flex flex-col items-center px-10 py-12 md:px-20 md:py-16 rounded-sm bg-[#F5E6D3]/95 backdrop-blur-xl border border-[#3C2415]/15 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.55)]">
+          {/* Inner hairline frame — letterpress refinement */}
+          <div
+            className="absolute inset-2 md:inset-3 border border-[#3C2415]/15 rounded-[2px] pointer-events-none"
+            aria-hidden="true"
+          />
+
           <motion.div
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.15, ease: EASE_OUT_EXPO }}
-            className="absolute top-4 left-4 md:top-6 md:left-6 w-8 h-8 md:w-10 md:h-10 origin-top-left pointer-events-none"
+            className="absolute top-4 left-4 md:top-6 md:left-6 w-9 h-9 md:w-11 md:h-11 origin-top-left pointer-events-none"
             aria-hidden="true"
           >
-            <span className="absolute top-0 left-0 h-px w-full bg-[#3C2415]/70" />
-            <span className="absolute top-0 left-0 w-px h-full bg-[#3C2415]/70" />
+            <span className="absolute top-0 left-0 h-px w-full bg-[#3C2415]/80" />
+            <span className="absolute top-0 left-0 w-px h-full bg-[#3C2415]/80" />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ duration: 1, delay: 0.1, ease: EASE_OUT_EXPO }}
+            className="flex items-center gap-3 mb-5 mt-2"
+            aria-hidden="true"
+          >
+            <span className="h-px w-8 md:w-12 bg-[#3C2415]/50" />
+            <span className="block w-[5px] h-[5px] rounded-full bg-[#C8956C]" />
+            <span className="h-px w-8 md:w-12 bg-[#3C2415]/50" />
           </motion.div>
 
           <motion.p
             initial={{ opacity: 0, letterSpacing: "0.05em" }}
-            animate={{ opacity: 1, letterSpacing: "0.32em" }}
+            animate={{ opacity: 1, letterSpacing: "0.42em" }}
             transition={{ duration: 1.1, delay: 0.2, ease: EASE_OUT_EXPO }}
-            className="font-mono font-bold text-[13px] md:text-[15px] uppercase text-[#3C2415] mb-5 mt-6"
+            className="font-mono font-semibold text-[12px] md:text-[14px] uppercase text-[#3C2415] mb-6 pl-[0.42em]"
           >
-            Visual Journey
+            Voyage Visuel
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.4, ease: EASE_OUT_EXPO }}
-            className="font-display font-semibold italic text-[clamp(3rem,12vw,8rem)] lg:text-9xl text-[#3C2415] tracking-tight leading-[1.02]"
+            className="font-display italic text-[clamp(3.25rem,12vw,8.5rem)] lg:text-9xl text-[#3C2415] tracking-tight leading-[0.95]"
+            style={{ textShadow: "0 1px 0 rgba(255,255,255,0.4)" }}
           >
-            The <span className="text-gold-shimmer not-italic font-display font-semibold italic">Gallery</span>
+            La <span className="not-italic font-display italic text-[#6B3410]">Galerie</span>
           </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ duration: 1, delay: 0.7, ease: EASE_OUT_EXPO }}
+            className="flex items-center gap-2 mt-7 mb-4"
+            aria-hidden="true"
+          >
+            <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#3C2415]/40" />
+            <span className="text-[#C8956C] text-xs tracking-[0.3em]">&#10086;</span>
+            <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#3C2415]/40" />
+          </motion.div>
+
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75, duration: 0.9 }}
-            className="font-accent font-bold italic text-xl md:text-2xl lg:text-3xl text-[#3C2415] mt-6 max-w-2xl mx-auto leading-relaxed"
+            transition={{ delay: 0.85, duration: 0.9 }}
+            className="font-accent font-semibold italic text-lg md:text-xl lg:text-2xl text-[#3C2415] max-w-2xl mx-auto leading-snug tracking-wide"
           >
-            Moments captured in <span className="text-[#C8956C]">golden light</span>
+            Moments capturés dans une <span className="text-[#A6743F] font-bold">lumière dorée</span>
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.95, ease: EASE_OUT_EXPO }}
-            className="absolute bottom-4 right-4 md:bottom-6 md:right-6 w-8 h-8 md:w-10 md:h-10 origin-bottom-right pointer-events-none"
+            className="absolute bottom-4 right-4 md:bottom-6 md:right-6 w-9 h-9 md:w-11 md:h-11 origin-bottom-right pointer-events-none"
             aria-hidden="true"
           >
-            <span className="absolute bottom-0 right-0 h-px w-full bg-[#3C2415]/70" />
-            <span className="absolute bottom-0 right-0 w-px h-full bg-[#3C2415]/70" />
+            <span className="absolute bottom-0 right-0 h-px w-full bg-[#3C2415]/80" />
+            <span className="absolute bottom-0 right-0 w-px h-full bg-[#3C2415]/80" />
           </motion.div>
         </div>
       </section>
@@ -182,7 +228,7 @@ export default function Gallery() {
                 {!active && (
                   <span className="absolute inset-0 border border-charcoal rounded-full transition-colors duration-200 hover:border-amber/50" />
                 )}
-                <span className="relative">{cat}</span>
+                <span className="relative">{categoryLabels[cat] ?? cat}</span>
               </button>
             );
           })}
@@ -216,7 +262,7 @@ export default function Gallery() {
                       src={imageSrc(img.image || "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=800&q=80", 800)}
                       srcSet={imageSrcSet(img.image)}
                       sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      alt={img.title || "Gallery"}
+                      alt={img.title || "Galerie"}
                       decoding="async"
                       className="block w-full h-auto object-cover"
                       loading={i < 8 ? "eager" : "lazy"}
@@ -224,19 +270,19 @@ export default function Gallery() {
                       whileHover={{ scale: 1.06 }}
                       transition={{ duration: 0.9, ease: EASE_OUT_EXPO }}
                     />
-                    {/* Permanent index marker */}
-                    <span className="absolute top-3 left-3 z-10 font-mono text-[9px] tracking-[0.3em] text-blush/85 px-2 py-1 rounded-sm bg-void/40 backdrop-blur-sm transition-colors duration-500 group-hover:bg-amber group-hover:text-void">
+                    {/* Permanent index marker — amber pill (matches hovered state) */}
+                    <span className="absolute top-3 left-3 z-10 font-mono font-bold text-[10px] tracking-[0.3em] text-void px-2 py-1 rounded-sm bg-amber shadow-[0_4px_12px_-4px_rgba(0,0,0,0.5)]">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    {/* Hover overlay with category + title */}
+                    {/* Hover overlay — floating glassy black pill, soft & legible on every photo */}
                     <motion.div
                       initial={false}
-                      className="absolute inset-0 bg-gradient-to-t from-void/85 via-void/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex flex-col items-start justify-end p-5"
+                      className="absolute left-3 right-3 bottom-3 opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex flex-col items-start px-4 py-3 bg-black/65 backdrop-blur-xl rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]"
                     >
-                      <span className="section-label text-xs text-amber mb-1 translate-y-2 group-hover:translate-y-0 transition-transform duration-400">
-                        {img.category?.toUpperCase()}
+                      <span className="section-label font-bold text-[10px] text-amber mb-1 translate-y-1 group-hover:translate-y-0 transition-transform duration-400">
+                        {(categoryLabels[img.category] ?? img.category)?.toUpperCase()}
                       </span>
-                      <span className="font-display italic text-lg md:text-xl text-blush translate-y-2 group-hover:translate-y-0 transition-transform duration-500 delay-75 leading-tight">
+                      <span className="font-display italic font-semibold text-base md:text-lg text-blush translate-y-1 group-hover:translate-y-0 transition-transform duration-500 delay-75 leading-tight">
                         {img.title}
                       </span>
                     </motion.div>
@@ -268,7 +314,7 @@ export default function Gallery() {
               whileTap={{ scale: 0.9 }}
               onClick={() => setLightboxOpen(false)}
               className="absolute top-6 right-6 w-10 h-10 rounded-full glass-card flex items-center justify-center text-parchment hover:text-amber z-10"
-              aria-label="Close"
+              aria-label="Fermer"
             >
               <X size={20} />
             </motion.button>
@@ -282,7 +328,7 @@ export default function Gallery() {
               whileTap={{ scale: 0.9 }}
               onClick={(e) => { e.stopPropagation(); navigateLightbox(-1); }}
               className="absolute left-4 md:left-8 w-10 h-10 rounded-full glass-card flex items-center justify-center text-parchment hover:text-amber z-10"
-              aria-label="Previous"
+              aria-label="Précédent"
             >
               <ChevronLeft size={20} />
             </motion.button>
@@ -294,7 +340,7 @@ export default function Gallery() {
               whileTap={{ scale: 0.9 }}
               onClick={(e) => { e.stopPropagation(); navigateLightbox(1); }}
               className="absolute right-4 md:right-8 w-10 h-10 rounded-full glass-card flex items-center justify-center text-parchment hover:text-amber z-10"
-              aria-label="Next"
+              aria-label="Suivant"
             >
               <ChevronRight size={20} />
             </motion.button>
@@ -317,19 +363,19 @@ export default function Gallery() {
               />
             </AnimatePresence>
 
-            {/* Info */}
+            {/* Info — glassy black pill, floating above the bottom edge */}
             <motion.div
               key={`info-${currentImage}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center"
+              className="absolute bottom-8 inset-x-0 mx-auto w-fit text-center px-7 py-4 bg-black/65 backdrop-blur-xl rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.7)]"
             >
-              <p className="font-mono text-xs text-muted-taupe mb-1">
+              <p className="font-mono font-semibold text-sm md:text-base text-parchment mb-2 tracking-[0.2em]">
                 {currentImage + 1} / {images.length}
               </p>
-              <p className="font-body text-sm text-blush">{images[currentImage].title}</p>
-              <p className="section-label text-xs text-amber mt-1">{images[currentImage].category?.toUpperCase()}</p>
+              <p className="font-display italic font-semibold text-2xl md:text-3xl text-blush">{images[currentImage].title}</p>
+              <p className="section-label font-bold text-sm md:text-base text-amber mt-2 tracking-[0.32em]">{(categoryLabels[images[currentImage].category] ?? images[currentImage].category)?.toUpperCase()}</p>
             </motion.div>
           </motion.div>
         )}

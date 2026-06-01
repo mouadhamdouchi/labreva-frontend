@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { viewportOnce, EASE_OUT_EXPO } from "@/lib/motion";
 
 interface ChapterHeadingProps {
-  number: string;
   eyebrow: string;
   title: ReactNode;
   align?: "left" | "center";
@@ -12,7 +11,6 @@ interface ChapterHeadingProps {
 }
 
 export default function ChapterHeading({
-  number,
   eyebrow,
   title,
   align = "left",
@@ -26,19 +24,10 @@ export default function ChapterHeading({
     <div className={`${isCenter ? "text-center" : ""} ${className}`}>
       <div className={`flex items-center gap-5 mb-6 ${isCenter ? "justify-center" : ""}`}>
         <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewportOnce}
-          transition={{ duration: 0.9, ease: EASE_OUT_EXPO }}
-          className="font-mono text-amber/80 text-xs md:text-sm tracking-[0.3em]"
-        >
-          {number}
-        </motion.span>
-        <motion.span
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={viewportOnce}
-          transition={{ duration: 1.1, ease: EASE_OUT_EXPO, delay: 0.1 }}
+          transition={{ duration: 1.1, ease: EASE_OUT_EXPO }}
           className="h-px w-12 md:w-20 bg-amber/40 origin-left inline-block"
         />
         <motion.span

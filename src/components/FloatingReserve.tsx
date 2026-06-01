@@ -33,7 +33,7 @@ export default function FloatingReserve() {
               className="magnetic-btn inline-flex items-center gap-2.5 px-6 py-3.5 bg-amber text-void text-xs font-medium tracking-wider uppercase rounded-full shadow-[0_10px_40px_-10px_rgba(200,149,108,0.5)] animate-glow-pulse"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-void animate-pulse" aria-hidden="true" />
-              Reserve a Table
+              Réserver une Table
             </Link>
           </motion.div>
         </motion.div>

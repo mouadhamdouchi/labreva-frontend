@@ -1,15 +1,13 @@
-import { lazy, Suspense, useEffect, type ComponentType } from "react";
+import { lazy, Suspense, useEffect, useRef, type ComponentType } from "react";
 import { Routes, Route, useLocation } from "react-router";
 import { AnimatePresence } from "framer-motion";
+import Lenis from "lenis";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PublicLayout from "./components/layout/PublicLayout";
 import PageTransition from "./components/PageTransition";
 
-function ScrollToTop({ pathname }: { pathname: string }) {
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-  }, [pathname]);
-  return null;
-}
+gsap.registerPlugin(ScrollTrigger);
 
 const Home = lazy(() => import("./pages/Home"));
 const Menu = lazy(() => import("./pages/Menu"));
@@ -52,10 +50,48 @@ function PublicPage({ PageComponent }: { PageComponent: ComponentType }) {
 
 export default function App() {
   const location = useLocation();
+  const lenisRef = useRef<Lenis | null>(null);
+
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    if (prefersReduced || isTouchDevice) return;
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      wheelMultiplier: 0.6,
+      touchMultiplier: 1.4,
+      lerp: 0.1,
+      smoothWheel: true,
+    });
+    lenisRef.current = lenis;
+
+    const updateScrollTrigger = () => ScrollTrigger.update();
+    lenis.on("scroll", updateScrollTrigger);
+
+    const rafCb = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(rafCb);
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      gsap.ticker.remove(rafCb);
+      lenis.off("scroll", updateScrollTrigger);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+    }
+  }, [location.pathname]);
 
   return (
     <Suspense fallback={<PageFallback />}>
-      <ScrollToTop pathname={location.pathname} />
       <AnimatePresence mode="wait" initial={false}>
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PublicPage PageComponent={Home} />} />

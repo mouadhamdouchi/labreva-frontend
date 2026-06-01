@@ -46,9 +46,15 @@
   }
 
   html {
-    scroll-behavior: smooth;
     /* Shrink the whole site by 20% — all rem-based text, padding, gaps, widths follow */
     font-size: 80%;
+  }
+
+  /* Smooth scroll only on pointer-fine devices (desktop). Touch devices keep native momentum. */
+  @media (hover: hover) and (pointer: fine) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
@@ -58,6 +64,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    /* Native momentum scroll on iOS Safari */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: auto;
   }
 }
 
